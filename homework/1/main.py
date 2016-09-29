@@ -10,11 +10,7 @@ class Charge:
     def __str__(self):
         return str(self.value)
 
-    def __repr__(self):
-        return str(self)
-
 class Account:
-
     def __init__(self):
         self._charges = []
         self._total = 0
@@ -35,10 +31,7 @@ class Account:
         self._total += charge.value
 
     def __str__(self):
-        return 'Account Charges:{0}\nCurrent Balance:{1}'.format(self.charges, self.total)
-
-    def __repr__(self):
-        return str(self)
+        return 'Account Charges: {0}\nCurrent Balance: {1}'.format(', '.join(map(str, self.charges)), self.total)
 
 if __name__ == '__main__':
     charge1 = Charge(3)
