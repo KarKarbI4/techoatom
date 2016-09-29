@@ -21,7 +21,7 @@ class Account:
 
     @property
     def total(self):
-        return self._total
+        return round(self._total, 2)
 
     def __iter__(self):
         return iter(self.charges)
@@ -36,9 +36,13 @@ class Account:
 if __name__ == '__main__':
     charge1 = Charge(3)
     charge2 = Charge(3.232324323)
-    print(charge1.value)
+    charge3 = Charge(-4)
+    print(charge1)
 
     account = Account()
     account.transaction(charge1)
     account.transaction(charge2)
+    account.transaction(charge3)
     print(account)
+    for charge in account:
+        print(charge)
