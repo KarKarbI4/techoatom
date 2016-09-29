@@ -11,9 +11,9 @@ class Charge:
         return str(self.value)
 
 class Account:
-    def __init__(self):
+    def __init__(self, total=0):
         self._charges = []
-        self._total = 0
+        self._total = round(float(total), 2)
 
     @property
     def charges(self):
