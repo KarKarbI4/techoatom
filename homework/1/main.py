@@ -28,23 +28,22 @@ class Account:
 
     def transaction(self, charge):
         self._charges.append(charge)
-        self._total = max(self._total + charge.value, self._total)
+        self._total = max(self._total + charge.value, 0)
 
     def __str__(self):
         return 'Account Charges: {0}\nCurrent Balance: {1}'.format(', '.join(map(str, self.charges)), self.total)
 
 if __name__ == '__main__':
     charge1 = Charge(3)
-    charge2 = Charge(3.232324323)
+    charge2 = Charge(9.3235)
     charge3 = Charge(-4)
-    charge4 = Charge(-94.0333)
+    # charge4 = Charge(-94.0333)
     print(charge1)
-
     account = Account()
     account.transaction(charge1)
     account.transaction(charge2)
     account.transaction(charge3)
-    account.transaction(charge4)
+    # account.transaction(charge4)
     print(account)
     for charge in account:
         print(charge)
