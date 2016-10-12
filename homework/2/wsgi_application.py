@@ -3,7 +3,6 @@ from events import events
 class WSGIApplication:
     def __init__(self, environment, start_response):
         print('Get request')
-        # setup_testing_defaults(environment)
         self.environment = environment
         self.start_response = start_response
         self.events = events(10, 7)
@@ -34,7 +33,6 @@ class WSGIApplication:
         print('Send headers')
         self.start_response('204 No Content', self.headers)
         print('Headers is sent')
-        # print('Send body')
 
     def ok_response(self, message):
         print('Create response')
