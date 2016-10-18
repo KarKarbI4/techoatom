@@ -1,21 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from finance.utils import get_html, gen_table
+from finance.utils import gen_headers, gen_charges
 
 def homepage(request):
-    title = 'Homepage'
-    body = '''
-    <h1>Welcome to Myfinance Homepage!</h1>
-    <a href='charges/'>My charges</a>
-    '''
-    html = get_html(title, body)
-    return HttpResponse(html)
+    return render(request, "finance/index.html")
 
 # Create your views here.
 def charges(request):
-    title = 'My Charges'
-    body = "<a href='/'>Homepage</a>\n"
-    body += gen_table()
-    html = get_html(title, body)
-    return HttpResponse(html)
+    context = {
+        'headers': gen_headers(),
+        'charges': gen_charges()
+    }
+    return render(request, "finance/charges.html", context)

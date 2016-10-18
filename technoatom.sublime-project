@@ -1,0 +1,5 @@
+{
+	"settings": {
+		"python_interpreter": "$project_path/env/bin/python"
+	}
+}

@@ -1,0 +1,26 @@
+{% extends "finance/base.html" %}
+
+{% block title %}Charges{% endblock %}
+
+{% block content %}
+<a href='/'>Homepage</a>
+<table>
+  <thead>
+    {% for header in headers %}
+      <th>{{ header }}</th>
+    {% endfor %}
+  </thead>
+  <tbody>
+    {% for charge in charges %}
+      <tr>
+        <td>{{ charge.id }}</td>
+        <td>{{ charge.type }}</td>
+        <td>{{ charge.card_num }}</td>
+        <td>{{ charge.date }}</td>
+        <td>{{ charge.sum }}</td>
+        <td>{{ charge.status }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
