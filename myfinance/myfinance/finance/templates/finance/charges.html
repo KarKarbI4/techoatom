@@ -3,24 +3,24 @@
 {% block title %}Charges{% endblock %}
 
 {% block content %}
-<a href='/'>Homepage</a>
+
+<a href='{% url 'charges:homepage' %}'>Homepage</a>
+<br>
+<a href='{% url 'charges:create_charge' %}'>Create Charge</a>
+
 <table>
   <thead>
-    {% for header in headers %}
-      <th>{{ header }}</th>
-    {% endfor %}
+      <th>Date</th>
+      <th>Value</th>
   </thead>
   <tbody>
-    {% for charge in charges %}
+    {% for charge in charges_in %}
       <tr>
-        <td>{{ charge.id }}</td>
-        <td>{{ charge.type }}</td>
-        <td>{{ charge.card_num }}</td>
         <td>{{ charge.date }}</td>
-        <td>{{ charge.sum }}</td>
-        <td>{{ charge.status }}</td>
+        <td>{{ charge.value }}</td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
+
 {% endblock %}

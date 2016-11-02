@@ -4,5 +4,7 @@
 
 {% block content %}
 <h1>Welcome to Myfinance Homepage!</h1>
-<a href='charges/'>My charges</a>
+<a href='{% url 'charges:charges' %}'>My Charges</a>
+<br>
+<a href='{% url 'charges:create_charge'%}'>Create Charge</a>
 {% endblock %}

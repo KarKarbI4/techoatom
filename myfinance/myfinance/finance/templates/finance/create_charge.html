@@ -1,0 +1,18 @@
+{% extends "finance/base.html" %}
+
+{% block title %}Create Charge{% endblock %}
+
+{% block content %}
+<a href='{% url 'charges:homepage' %}'>Homepage</a>
+<br>
+
+{% if success %}
+<span>Charge created successfully</span>
+{% endif %}
+
+<form action="{% url 'charges:create_charge' %}" method="post">
+  {{ charge_form }}
+  <button type="submit">Create</button>
+</form>
+
+{% endblock %}
