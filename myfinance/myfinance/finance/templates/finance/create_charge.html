@@ -5,13 +5,15 @@
 {% block content %}
 <a href='{% url 'charges:homepage' %}'>Homepage</a>
 <br>
+<a href='{% url 'charges:charges' %}'>My Charges</a>
+<br>
 
 {% if success %}
 <span>Charge created successfully</span>
 {% endif %}
 
 <form action="{% url 'charges:create_charge' %}" method="post">
-  {{ charge_form }}
+  {{ charge_form.as_p }}
   <button type="submit">Create</button>
 </form>
 

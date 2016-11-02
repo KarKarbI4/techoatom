@@ -8,19 +8,10 @@
 <br>
 <a href='{% url 'charges:create_charge' %}'>Create Charge</a>
 
-<table>
-  <thead>
-      <th>Date</th>
-      <th>Value</th>
-  </thead>
-  <tbody>
-    {% for charge in charges_in %}
-      <tr>
-        <td>{{ charge.date }}</td>
-        <td>{{ charge.value }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<h3>Charges in</h3>
+{% include "finance/charges_table.html" with charges=charges_in %}
+
+<h3>Charges off</h3>
+{% include "finance/charges_table.html" with charges=charges_off %}
 
 {% endblock %}

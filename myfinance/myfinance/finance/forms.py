@@ -12,5 +12,5 @@ class ChargeForm(forms.Form):
         cleaned_data = super().clean()
         if cleaned_data.get('value') < 0 and \
         cleaned_data.get('date') > date.today():
-            self.add_error('date', 'Charge off are not supported for future days')
+            self.add_error('date', 'Charges off are not supported for future days. Please, try again.')
         return cleaned_data

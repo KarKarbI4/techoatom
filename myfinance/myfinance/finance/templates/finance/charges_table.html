@@ -1,0 +1,18 @@
+{% if charges %}
+  <table>
+    <thead>
+        <th>Date</th>
+        <th>Value</th>
+    </thead>
+    <tbody>
+      {% for charge in charges %}
+        <tr>
+          <td>{{ charge.date }}</td>
+          <td>{{ charge.value }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p> No charges at the moment.
+{% endif %}

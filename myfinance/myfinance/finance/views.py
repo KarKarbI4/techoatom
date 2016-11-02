@@ -5,15 +5,25 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from finance.forms import ChargeForm
-
 from finance.Charge import Charge
+from finance.random_transactions import random_transactions
 
 def homepage(request):
     return render(request, 'finance/index.html')
 
 def charges(request):
+    charges_in = []
+    charges_off = []
+
+    for date, value in random_transactions():
+        if value > 0:
+            charges_in.append(Charge(value, date))
+        else:
+            charges_off.append(Charge(value, date))
+
     context = {
-        'charges': []
+        'charges_in': charges_in,
+        'charges_off': charges_off
     }
     return render(request, 'finance/charges.html', context)
 
