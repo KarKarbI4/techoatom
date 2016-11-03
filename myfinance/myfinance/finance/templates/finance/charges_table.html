@@ -1,12 +1,15 @@
+{% load bootstrap3 %}
 {% if charges %}
-  <table>
+  <table class="table table-striped">
     <thead>
+        <th>#</th>
         <th>Date</th>
         <th>Value</th>
     </thead>
     <tbody>
       {% for charge in charges %}
         <tr>
+          <td>{{ forloop.counter0 }}</td>
           <td>{{ charge.date }}</td>
           <td>{{ charge.value }}</td>
         </tr>
@@ -14,5 +17,5 @@
     </tbody>
   </table>
 {% else %}
-  <p> No charges at the moment.
+  {% bootstrap_alert "No charges at the moment" alert_type='warning' %}
 {% endif %}

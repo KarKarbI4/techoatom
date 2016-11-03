@@ -1,18 +1,74 @@
 {% load static %}
 
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="description" content="Myfinance - online finance management service">
-  <meta name="author" content="Victor Tyunyakov">
+	<meta charset="utf-8">
+	<meta name="description" content="Myfinance - online finance management service">
+	<meta name="author" content="Victor Tyunyakov">
 
-  <link rel="stylesheet" href="{% static 'finance/style.css' %}" />
-  <title>{% block title %}Base{% endblock %} - Myfinance</title>
+	<link rel="stylesheet" href="{% static 'finance/style.css' %}" />
+	<title>{% block title %}Base{% endblock %} - Myfinance</title>
 </head>
+
 <body>
-  <div id="content">
-    {% block content %}{% endblock %}
-  </div>
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href='{% url 'charges:homepage' %}'>Myfinance
+{#          <img alt="Brand" src="..."> #}
+				</a>
+			</div>
+			
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					{# Homepage #}
+					{% url 'charges:homepage' as homepage_url %}
+					{% url 'charges:charges' as charges_url %}
+					{% url 'charges:create_charge' as create_charge_url %}
+
+					{% if request.path == homepage_url %} 
+						<li class="active"><a href='{{ homepage_url }}'>Homepage<span class="sr-only">(current)</span></a></li>
+					{% else %}
+						<li><a href='{{ homepage_url }}'>Homepage</a></li>
+					{% endif %}
+
+					{# My Charges #}
+					{% if request.path == charges_url %} 
+						<li class="active"><a href='{{ charges_url }}'>My Charges<span class="sr-only">(current)</span></a></li>
+					{% else %}
+						<li><a href='{{ charges_url }}'>My Charges</a></li>
+					{% endif %}
+
+					{# Create Charge #}
+					{% if request.path == create_charge_url %} 
+						<li class="active"><a href='{{ create_charge_url }}'>Create Charge<span class="sr-only">(current)</span></a></li>
+					{% else %}
+						<li><a href='{{ create_charge_url }}'>Create Charge</a></li>
+					{% endif %}
+
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+
+	<div class="container">
+		{% block content %}{% endblock %}
+	</div>
 </body>
 </html>

@@ -1,20 +1,18 @@
 {% extends "finance/base.html" %}
 
+{% load bootstrap3 %}
+
 {% block title %}Create Charge{% endblock %}
 
 {% block content %}
-<a href='{% url 'charges:homepage' %}'>Homepage</a>
-<br>
-<a href='{% url 'charges:charges' %}'>My Charges</a>
-<br>
 
 {% if success %}
-<span>Charge created successfully</span>
+{% bootstrap_alert "Charge created successfully" alert_type='success' %}
 {% endif %}
 
 <form action="{% url 'charges:create_charge' %}" method="post">
-  {{ charge_form.as_p }}
-  <button type="submit">Create</button>
+  {% bootstrap_form charge_form %}
+  {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" %}
 </form>
 
 {% endblock %}
