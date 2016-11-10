@@ -76,9 +76,17 @@ WSGI_APPLICATION = 'myfinance.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'myfinance',
+        'USER': 'myfinance',
+        'PASSWORD': 'myfinance',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -120,3 +128,24 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# BOOTSTRAP_BASE_URL = os.path.join(STATIC_URL, 'bootstrap', '337')
+
+# Default settings
+# BOOTSTRAP3 = {
+#     'include_jquery': False,
+#     'jquery_url': os.path.join(BOOTSTRAP_BASE_URL, 'jquery-3.1.1.min.js'),
+#     'base_url': BOOTSTRAP_BASE_URL,
+#     'css_url': os.path.join(BOOTSTRAP_BASE_URL, 'css', 'bootstrap.min.css'),
+#     'javascript_url': os.path.join(BOOTSTRAP_BASE_URL, 'js', 'bootstrap.min.js'),
+# }
+
+# BOOTSTRAP3 = {
+#     'include_jquery': False,
+#     'jquery_url': '/static/jqu1ery-3.1.1.min.js',
+#     'base_url': '/static/bootstrap/',
+#     'css_url': '/static/bootstrap/css/bootstrap.min.css',
+#     'javascript_url': '/static/bootstrap/js/bootstrap.min.js',
+# }
+
+# BOOTSTRAP_BASE_URL = '/static/bootstrap/'
