@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 class ChargeForm(forms.Form):
     value = forms.DecimalField(label='Value', required=True)
     date = forms.DateField(label='Date', required=True)
-
+    
     def clean(self):
         cleaned_data = super().clean()
         if cleaned_data.get('value') < 0 and \
