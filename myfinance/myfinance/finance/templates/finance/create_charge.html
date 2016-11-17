@@ -12,6 +12,7 @@
 
 <form action="{% url 'charges:create_charge' %}" method="post">
   {% bootstrap_form charge_form %}
+  {% comment %}{{ charge_form }}{% endcomment %}
   {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" %}
 </form>
 
