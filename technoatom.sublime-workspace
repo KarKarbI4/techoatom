@@ -43,24 +43,16 @@
 			"file": "/home/victor/dev/test_db_generator/main.py",
 			"settings":
 			{
-				"buffer_size": 301,
+				"buffer_size": 579,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/home/victor/dev/test_db_generator/MainWindow.ui",
+			"file": "/home/victor/dev/test_db_generator/SessionManager.py",
 			"settings":
 			{
-				"buffer_size": 1233,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/victor/dev/test_db_generator/MainWindow.py",
-			"settings":
-			{
-				"buffer_size": 5118,
+				"buffer_size": 10107,
 				"line_ending": "Unix"
 			}
 		}
@@ -106,9 +98,16 @@
 	},
 	"file_history":
 	[
+		"/home/victor/dev/test_db_generator/SessionManager.",
+		"/home/victor/dev/python3-cgdk/Runner.py",
+		"/home/victor/dev/python3-cgdk/RemoteProcessClient.py",
+		"/home/victor/dev/python3-cgdk/MyStrategy.py",
+		"/home/victor/dev/test_db_generator/main.py",
+		"/home/victor/dev/techoatom/myfinance/myfinance/myfinance/settings.py",
+		"/home/victor/dev/test_db_generator/MainWindow.py",
+		"/home/victor/dev/test_db_generator/MainWindow.ui",
 		"/home/victor/dev/techoatom/myfinance/myfinance/finance/tests.py",
 		"/home/victor/dev/techoatom/myfinance/myfinance/finance/Charge.py",
-		"/home/victor/dev/techoatom/myfinance/myfinance/myfinance/settings.py",
 		"/home/victor/dev/techoatom/myfinance/myfinance/finance/forms.py",
 		"/home/victor/dev/techoatom/myfinance/myfinance/finance/templates/finance/index.html",
 		"/home/victor/dev/techoatom/myfinance/myfinance/finance/urls.py",
@@ -171,7 +170,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -180,73 +179,43 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 301,
+						"buffer_size": 579,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								301,
-								301
+								149,
+								149
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax"
+							"syntax": "Packages/Djaneiro/Syntaxes/Python Django.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "/home/victor/dev/test_db_generator/MainWindow.ui",
+					"file": "/home/victor/dev/test_db_generator/SessionManager.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1233,
+						"buffer_size": 10107,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/XML/XML.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/home/victor/dev/test_db_generator/MainWindow.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5118,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								635,
-								635
+								267,
+								267
 							]
 						],
 						"settings":
@@ -256,10 +225,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 117.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
