@@ -1,0 +1,1 @@
+SELECT Charges.date, Charges.value, Account.number FROM Charges INNER JOIN Account ON (Charges.account_id = Account.id);
