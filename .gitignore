@@ -92,3 +92,6 @@ env/
 # Sublime Text project settings
 *.sublime-project
 *.sublime-workspace
+
+# VS Code project settings
+.vscode/
