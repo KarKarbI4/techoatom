@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from finance.forms import ChargeForm
-from finance.Charge import Charge
+from finance.models import Charge
 from finance.random_transactions import random_transactions
 
 
@@ -16,11 +16,11 @@ def homepage(request):
 def charges(request):
     charges_in = []
     charges_off = []
-    for date, value in random_transactions():
-        if value > 0:
-            charges_in.append(Charge(value, date))
+    for charge in Charge.objects.all():
+        if charge.value > 0:
+            charges_in.append(charge)
         else:
-            charges_off.append(Charge(value, date))
+            charges_off.append(charge)
 
     context = {
         'charges_in': charges_in,
@@ -37,8 +37,7 @@ def create_charge(request):
     if request.method == 'POST':
         charge_form = ChargeForm(request.POST)
         if charge_form.is_valid():
-            Charge(charge_form.cleaned_data[
-                'value'], charge_form.cleaned_data['date'])
+            charge = charge_form.save()
             success = True
 
     if request.method == 'GET':
