@@ -1,0 +1,29 @@
+{% extends "finance/accounts.html" %}
+
+{% load bootstrap3 %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %}Account {{ account.name }}{% endblock %}
+
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% url 'charges:account' account_id=account.id as url_account %}
+    {% breadcrumb account.name url_account %}
+{% endblock %}
+
+{% block content %}
+
+  <p>{{ url_account }}
+  <h1>{{ account.name }}</h1>
+  <b>Total Balance </b>: {{ account.total }}
+  <br>
+  <b>Card Number </b>: {{ account.card_num }}
+  <br>
+  {% url 'charges:create_charge' account_id=account.id as url_create_charge %}
+  {% bootstrap_button "Add charge" href=url_create_charge button_class="btn-primary" icon="glyphicon glyphicon-plus" %}
+  <h3>Charges:</h3>
+  {% include "finance/charges_table.html" with charges=charges %}
+{% endblock %}

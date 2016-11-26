@@ -1,0 +1,25 @@
+{% extends "finance/base.html" %}
+
+{% load bootstrap3 %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Create Account" "/create_account" %}
+{% endblock %}
+
+{% block content %}
+
+{% if success %}
+{% bootstrap_alert "Account created successfully" alert_type='success' %}
+{% endif %}
+
+<form action="{% url 'charges:create_account' %}" method="post">
+  {% bootstrap_form account_form %}
+  {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" %}
+</form>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% load bootstrap3 %}
+
+{% if accounts %}
+  <table class="table table-striped selectable">
+    <thead>
+        <th>#</th>
+        <th>Name</th>
+        <th>Card Number</th>
+        <th>Total Balance</th>
+        <th></th>
+    </thead>
+    <tbody>
+      {% for account in accounts %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ account.name }}</td>
+          <td>{{ account.card_num }}</td>
+          <td>{{ account.total }}</td>
+          <td><a href='{% url 'charges:account' account_id=account.id %}'>{% bootstrap_icon "glyphicon glyphicon-th-list" %}</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  {% bootstrap_alert "You have no accounts. You can create a new one." alert_type='warning' dismissable=False %}
+{% endif %}

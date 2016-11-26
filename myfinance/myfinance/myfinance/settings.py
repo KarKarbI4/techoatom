@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'finance',
     'bootstrap3',
+    'django_bootstrap_breadcrumbs',
 ]
 
 MIDDLEWARE = [

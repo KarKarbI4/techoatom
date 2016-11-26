@@ -1,8 +1,16 @@
-{% extends "finance/base.html" %}
+{% extends "finance/account.html" %}
 
 {% load bootstrap3 %}
 
-{% block title %}Create Charge{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %}New Charge - {{ account.name }} Account{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% url 'charges:create_charge' account_id=account.id as url_create_charge %}
+    {% breadcrumb "New Charge" url_create_charge %}
+{% endblock %}
 
 {% block content %}
 
@@ -10,7 +18,7 @@
 {% bootstrap_alert "Charge created successfully" alert_type='success' %}
 {% endif %}
 
-<form action="{% url 'charges:create_charge' %}" method="post">
+<form action="{% url 'charges:create_charge' account_id=account.id %}" method="post">
   {% bootstrap_form charge_form %}
   {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" %}
 </form>

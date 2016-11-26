@@ -1,17 +1,29 @@
 {% load static %}
 
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous">
+</script>
+
 {% load bootstrap3 %}
 
 {% bootstrap_css %}
 
-<script
-  src="https://code.jquery.com/jquery-3.1.1.min.js"
-  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-  crossorigin="anonymous"></script>
 {% bootstrap_javascript %}
 
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+    {% clear_breadcrumbs %}
+    {% breadcrumb "Home" "/" %}
+{% endblock %}
+
+
+    
 
 <!DOCTYPE html>
 <html>
@@ -43,8 +55,8 @@
 				<ul class="nav navbar-nav">
 					{# Homepage #}
 					{% url 'charges:homepage' as homepage_url %}
-					{% url 'charges:charges' as charges_url %}
-					{% url 'charges:create_charge' as create_charge_url %}
+					{% url 'charges:accounts' as accounts_url %}
+					{% url 'charges:create_account' as create_account_url %}
 
 					{% if request.path == homepage_url %} 
 						<li class="active"><a href='{{ homepage_url }}'>Homepage<span class="sr-only">(current)</span></a></li>
@@ -52,18 +64,18 @@
 						<li><a href='{{ homepage_url }}'>Homepage</a></li>
 					{% endif %}
 
-					{# My Charges #}
-					{% if request.path == charges_url %} 
-						<li class="active"><a href='{{ charges_url }}'>My Charges<span class="sr-only">(current)</span></a></li>
+					{# My Accounts #}
+					{% if request.path == accounts_url %} 
+						<li class="active"><a href='{{ accounts_url }}'>My Accounts<span class="sr-only">(current)</span></a></li>
 					{% else %}
-						<li><a href='{{ charges_url }}'>My Charges</a></li>
+						<li><a href='{{ accounts_url }}'>My Accounts</a></li>
 					{% endif %}
 
-					{# Create Charge #}
-					{% if request.path == create_charge_url %} 
-						<li class="active"><a href='{{ create_charge_url }}'>Create Charge<span class="sr-only">(current)</span></a></li>
+					{# Create Account #}
+					{% if request.path == create_account_url %} 
+						<li class="active"><a href='{{ create_account_url }}'>Create Account<span class="sr-only">(current)</span></a></li>
 					{% else %}
-						<li><a href='{{ create_charge_url }}'>Create Charge</a></li>
+						<li><a href='{{ create_account_url }}'>Create Account</a></li>
 					{% endif %}
 
 				</ul>
@@ -73,7 +85,9 @@
 	</nav>
 
 	<div class="container">
-		{% block content %}{% endblock %}
+		{% render_breadcrumbs %}
+		{% block content %}
+		{% endblock %}
 	</div>
 </body>
 </html>

@@ -1,0 +1,20 @@
+{% extends "finance/base.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %}My Accounts{% endblock %}
+
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% url 'charges:accounts' as url_account %}
+    {% breadcrumb "Accounts" url_account %}
+{% endblock %}
+
+{% block content %}
+    <h3>My Accounts</h3>
+    {% include "finance/accounts_table.html" with accounts=accounts %}
+{% endblock %}
+
+

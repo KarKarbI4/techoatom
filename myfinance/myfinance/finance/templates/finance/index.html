@@ -3,8 +3,8 @@
 {% block title %}Homepage{% endblock %}
 
 {% block content %}
-<h1>Welcome to Myfinance Homepage!</h1>
-<a href='{% url 'charges:charges' %}'>My Charges</a>
-<br>
-<a href='{% url 'charges:create_charge'%}'>Create Charge</a>
+    <h1>Welcome to Myfinance Homepage!</h1>
+    <a href='{% url 'charges:accounts' %}'>My Accounts</a>
+    <br>
+    <a href='{% url 'charges:create_account'%}'>Create Account</a>
 {% endblock %}

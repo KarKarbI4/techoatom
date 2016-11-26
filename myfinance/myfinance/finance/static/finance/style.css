@@ -1,3 +1,11 @@
 body {
 	padding-top: 70px;
 }
+
+/*.selectable {
+	background-color: #F0B67F;
+}*/
+/*
+.selectable > tbody > tr:hover {
+	background-color: #F0B67F;
+}*/
