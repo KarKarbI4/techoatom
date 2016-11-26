@@ -58,6 +58,8 @@ def create_charge(request, account_id):
         if charge_form.is_valid():
             charge = charge_form.save(commit=False)
             charge.account = account
+            account.total += charge.value
+            account.save(update_fields=["total"])
             charge.save()
             success = True
 
