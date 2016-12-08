@@ -2,16 +2,31 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 from finance.forms import ChargeForm, AccountForm
 from finance.models import Charge, Account
 from finance.random_transactions import random_transactions
 
+@login_required
+def check_owner(f):
+    def wrapper(request, account_id):
+        if Account.objects.get(id=account_id).owner != request.user:
+            raise PermissionDenied
+        return f(request, account_id)
+    return wrapper
 
 def homepage(request):
     return render(request, 'finance/index.html')
 
+@check_owner
+def view_amount(request, account_id):
+    total = Account.objects.get(id=account_id).total
+    context = {
+        'total': total,
+    }
+    return render(request, 'finance/view_account_total.html', context=context)
 
 @csrf_exempt
 def create_account(request):
@@ -41,12 +56,14 @@ def accounts(request):
     }
     return render(request, 'finance/accounts.html', context)
 
+
 def account(request, account_id):
-    context= {
+    context = {
         'account': Account.objects.get(id=account_id),
         'charges': Charge.objects.filter(account=account_id),
     }
     return render(request, 'finance/account.html', context)
+
 
 @csrf_exempt
 def create_charge(request, account_id):
