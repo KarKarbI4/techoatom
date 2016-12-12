@@ -6,7 +6,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
-from finance.models import Account, Charge
+from finance.models import Account, Charge, User
 
 
 class ChargeForm(ModelForm):
@@ -39,3 +39,17 @@ class AccountForm(ModelForm):
                 'card_num', "Card number you specified is not valid. Plase, specify valid card number.")
 
         return card_num
+
+
+class LoginForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+
+
+class RegisterForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'email']

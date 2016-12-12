@@ -1,25 +1,78 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages import error
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST, require_http_methods
 
-from finance.forms import ChargeForm, AccountForm
-from finance.models import Charge, Account
+from finance.forms import AccountForm, ChargeForm, LoginForm, RegisterForm
+from finance.models import Account, Charge
 from finance.random_transactions import random_transactions
 
-@login_required
+
 def check_owner(f):
-    def wrapper(request, account_id):
+
+    @login_required
+    def wrapper(request, account_id, *args, **kwargs):
         if Account.objects.get(id=account_id).owner != request.user:
             raise PermissionDenied
-        return f(request, account_id)
+        return f(request, account_id, *args, **kwargs)
     return wrapper
+
 
 def homepage(request):
     return render(request, 'finance/index.html')
 
+
+@csrf_exempt
+@require_http_methods(['GET', 'POST'])
+def login_view(request):
+    login_form = LoginForm()
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect(reverse('charges:accounts'))
+            error(request, 'Wrong credentials!')
+
+    context = {
+        'login_form': login_form,
+    }
+
+    return render(request, 'finance/login.html', context=context)
+
+
+@csrf_exempt
+def register_view(request):
+    if request.method == "GET":
+        register_form = RegisterForm()
+
+    if request.method == "POST":
+        register_form = RegisterForm(request.POST)
+        if register_form.is_valid():
+            user = register_form.save(False)
+            user.set_password(user.password)
+            user.save()
+            user = authenticate(username=user.username, password=user.password)
+            if not user:
+                error(request, 'Wrong credentials!')
+                return redirect(reverse('charges:login'))
+            return redirect(reverse('charges:accounts'))
+
+    context = {
+        'register_form': register_form
+    }
+
+    return render(request, 'finance/register.html', context=context)
+
+
+@login_required
 @check_owner
 def view_amount(request, account_id):
     total = Account.objects.get(id=account_id).total
@@ -28,6 +81,8 @@ def view_amount(request, account_id):
     }
     return render(request, 'finance/view_account_total.html', context=context)
 
+
+@login_required
 @csrf_exempt
 def create_account(request):
     account_form = None
@@ -36,7 +91,7 @@ def create_account(request):
     if request.method == 'POST':
         account_form = AccountForm(request.POST)
         if account_form.is_valid():
-            account = account_form.save()
+            account_form.save()
             success = True
     elif request.method == 'GET':
         account_form = AccountForm()
@@ -50,6 +105,7 @@ def create_account(request):
     return render(request, 'finance/create_account.html', context)
 
 
+@login_required
 def accounts(request):
     context = {
         'accounts': Account.objects.all()
@@ -57,6 +113,7 @@ def accounts(request):
     return render(request, 'finance/accounts.html', context)
 
 
+@login_required
 def account(request, account_id):
     context = {
         'account': Account.objects.get(id=account_id),
@@ -65,6 +122,7 @@ def account(request, account_id):
     return render(request, 'finance/account.html', context)
 
 
+@login_required
 @csrf_exempt
 def create_charge(request, account_id):
     charge_form = None
@@ -75,9 +133,7 @@ def create_charge(request, account_id):
         if charge_form.is_valid():
             charge = charge_form.save(commit=False)
             charge.account = account
-            account.total += charge.value
-            account.save(update_fields=["total"])
-            charge.save()
+            charge = charge.save()
             success = True
 
     elif request.method == 'GET':

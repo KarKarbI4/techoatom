@@ -1,0 +1,22 @@
+{% extends "finance/base.html" %}
+
+{% load bootstrap3 %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %}Register page{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% url 'charges:register' as url_sign_up %}
+    {% breadcrumb "Sign up" url_sign_up %}
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'charges:register' %}" method="post">
+    {% bootstrap_form register_form %}
+    {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" %}
+    </form>
+    <span> Already have an account? <a href="{% url 'charges:login' %}"> Log in </a></span>
+
+{% endblock %}
