@@ -18,7 +18,8 @@ def hist(request):
         11: 'November',
         12: 'Decemember'
     }
-    
+    # data = [] 
+    # data.append([months[datetime_object.months, charge.value]
     datetime_object = datetime.datetime.strptime('Sep 01 2016  1:33PM', '%b %d %Y %I:%M%p')
     data = [
         ["Charges", "Months"],
