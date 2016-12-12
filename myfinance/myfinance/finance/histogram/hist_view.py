@@ -1,4 +1,9 @@
-def grafic(request):
+import datetime
+import json
+
+
+
+def hist(request):
     months = {
         1: 'January',
         2: 'February',
@@ -32,4 +37,4 @@ def grafic(request):
     ]
     data = json.dumps(data)
     context = {'data':data}
-    return render(request, 'finance/grafic.html', context=context)
+    return render(request, 'finance/hist.html', context=context)
