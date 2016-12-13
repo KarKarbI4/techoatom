@@ -17,5 +17,8 @@
     </tbody>
   </table>
 {% else %}
-  {% bootstrap_alert "No charges at the moment" alert_type='warning' dismissable=False %}
+  {% url 'charges:create_charge' account_id=account.id as url_create_charge %}
+  <div class="alert alert-warning">
+    <strong>No charges. </strong> You can <a href="{{ url_create_charge }}" class="alert-link">create a new one</a>.
+  </div>
 {% endif %}

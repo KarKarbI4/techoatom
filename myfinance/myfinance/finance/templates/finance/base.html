@@ -37,6 +37,7 @@
 </head>
 
 <body>
+	{% block menu %}
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -77,13 +78,32 @@
 					{% else %}
 						<li><a href='{{ create_account_url }}'>Create Account</a></li>
 					{% endif %}
+					
+					
 
 				</ul>
+				
+				{% if user.is_authenticated %}
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Loged in as {{ request.user }} <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="{% url 'charges:profile' %}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> View Profile</a></li>
+
+						<li role="separator" class="divider"></li>
+						<li><a href="{% url 'charges:logout' %}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Log Out</a></li>
+					</ul>
+					</li>
+				</ul>
+				{% else %}
+				<a href="{% url 'charges:login' %}" class="navbar-link navbar-right navbar-text"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Log in</a>
+				{% endif %}
+
 			</div>
 
 		</div>
 	</nav>
-
+	{% endblock %}
 	<div class="container">
 		{% render_breadcrumbs %}
 		{% block content %}

@@ -43,6 +43,8 @@ class AccountForm(ModelForm):
 
 class LoginForm(ModelForm):
 
+    password = forms.CharField(widget=forms.PasswordInput())
+
     class Meta:
         model = User
         fields = ['username', 'password']
@@ -50,6 +52,24 @@ class LoginForm(ModelForm):
 
 class RegisterForm(ModelForm):
 
+    password = forms.CharField(widget=forms.PasswordInput())
+    password_confirm = forms.CharField(
+        required=True, widget=forms.PasswordInput(), label="Confirm password")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get('password') != cleaned_data.get('password_confirm'):
+            self.add_error(
+                'password_confirm', 'Passwords should match.')
+        return cleaned_data
+
     class Meta:
         model = User
         fields = ['username', 'password', 'email']
+
+
+class ProfileForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'phone_number', 'address']

@@ -22,5 +22,8 @@
     </tbody>
   </table>
 {% else %}
-  {% bootstrap_alert "You have no accounts. You can create a new one." alert_type='warning' dismissable=False %}
+  {% url 'charges:create_account' as url_create_account%}
+  <div class="alert alert-warning">
+    <strong>You have no accounts. </strong> You can <a href="{{ url_create_account }}" class="alert-link">create a new one.</a>.
+  </div>
 {% endif %}
