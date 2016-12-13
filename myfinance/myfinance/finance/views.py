@@ -35,6 +35,8 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         if username and password:
+            print(username)
+            print(password)
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
@@ -56,10 +58,19 @@ def register_view(request):
     if request.method == "POST":
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
-            user = register_form.save(False)
+            user = register_form.save(commit=False)
+            print(user.username)
+            print(user.password)
             user.set_password(user.password)
+            print(user.username)
+            print(user.password)
+            
             user.save()
+            print(user.username)
+            print(user.password)
+            
             user = authenticate(username=user.username, password=user.password)
+            
             if not user:
                 error(request, 'Wrong credentials!')
                 return redirect(reverse('charges:login'))
@@ -91,7 +102,9 @@ def create_account(request):
     if request.method == 'POST':
         account_form = AccountForm(request.POST)
         if account_form.is_valid():
-            account_form.save()
+            account = account_form.save(commit=False)
+            account.owner = request.user
+            account.save()
             success = True
     elif request.method == 'GET':
         account_form = AccountForm()
