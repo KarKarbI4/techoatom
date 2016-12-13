@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models, transaction
+from django.db.models import Func
 
 
 # Create your models here.
@@ -44,3 +45,9 @@ class Charge(models.Model):
 
     class Meta:
         db_table = 'charges'
+
+
+class Month(Func):
+    function = 'EXTRACT'
+    template = '%(function)s(MONTH from %(expressions)s)'
+    output_field = models.IntegerField()

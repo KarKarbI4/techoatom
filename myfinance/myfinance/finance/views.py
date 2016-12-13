@@ -1,15 +1,23 @@
+from datetime import datetime
+from calendar import month_abbr
+from decimal import Decimal, getcontext
+import json
+
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error
 from django.core.exceptions import PermissionDenied
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST, require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 
-from finance.forms import AccountForm, ChargeForm, LoginForm, RegisterForm, ProfileForm
-from finance.models import Account, Charge
+from finance.forms import (AccountForm, ChargeForm, LoginForm, ProfileForm,
+                           RegisterForm)
+from finance.models import Account, Charge, Month
 from finance.random_transactions import random_transactions
 
 
@@ -87,11 +95,13 @@ def register_view(request):
 
     return render(request, 'finance/register.html', context=context)
 
+
 @require_http_methods(['POST', 'GET'])
 @login_required
 @csrf_exempt
 def profile(request):
-    profile_form = ProfileForm(request.POST or None, request.FILES or None, instance=request.user)
+    profile_form = ProfileForm(
+        request.POST or None, request.FILES or None, instance=request.user)
     success = None
 
     if request.method == "POST":
@@ -106,6 +116,7 @@ def profile(request):
         'success': success
     }
     return render(request, 'finance/profile.html', context=context)
+
 
 @login_required
 @check_owner
@@ -145,22 +156,45 @@ def create_account(request):
 @login_required
 def accounts(request):
     context = {
-        'accounts': Account.objects.all()
+        'accounts': Account.objects.filter(owner=request.user)
     }
     return render(request, 'finance/accounts.html', context)
 
 
+@check_owner
 @login_required
 def account(request, account_id):
+    end_date = datetime.today()
+    m = end_date.month
+    start_date = end_date - relativedelta(months=12, days=end_date.day - 1)
+    
+    latest_year_charges = Charge.objects.filter(
+        account=account_id, date__range=[start_date, end_date])
+    agg_data = latest_year_charges.annotate(month=Month('date')).values(
+        'month').annotate(total=Sum('value')).order_by('month')
+    
+    getcontext().prec = 3
+    
+    hist_values = [[month_abbr[(i + m - 1) % 12 + 1], 0.0]
+                   for i in range(1, 13)]
+    
+    for rec in agg_data:
+        hist_values[(rec['month'] + m -1) % 12][1] = float(rec['total'])
+    hist_header = [['Month', 'Total']]
+    hist_data = hist_header + hist_values
+    hist_json = json.dumps(hist_data)
+    print(list(hist_data))
     context = {
         'account': Account.objects.get(id=account_id),
         'charges': Charge.objects.filter(account=account_id),
+        'hist_data': hist_json,
     }
+
     return render(request, 'finance/account.html', context)
 
 
+@check_owner
 @login_required
-@csrf_exempt
 def create_charge(request, account_id):
     charge_form = None
     success = None
@@ -170,7 +204,7 @@ def create_charge(request, account_id):
         if charge_form.is_valid():
             charge = charge_form.save(commit=False)
             charge.account = account
-            charge = charge.save()
+            charge.save()
             success = True
 
     elif request.method == 'GET':
