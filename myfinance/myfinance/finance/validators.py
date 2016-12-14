@@ -38,11 +38,15 @@ def StripToNumbers(number):
     else:
         raise ValueError('Number has invalid digits')
 
+def ValidateNotAZero(number):
+    return int(number) != 0
 
 def ValidateCreditCard(number):
     """ Check that a credit card number matches the type and validates the Luhn Checksum """
     if not ValidateCharacters(number):
         raise ValidationError('Can only contain numbers and spaces.')
     number = StripToNumbers(number)
+    if not ValidateNotAZero(number):
+        raise ValidationError('Can not be zeros')
     if not ValidateLuhnChecksum(number):
         raise ValidationError('Not a valid credit card number.')
