@@ -4,21 +4,8 @@ from django.core.validators import RegexValidator
 from django.db import models, transaction
 from django.db.models import Func
 
+from finance.validators import ValidateCreditCard
 # Create your models here.
-
-
-class CardNumValidator:
-
-    CREDIT_CARD_RE = r'^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\\d{3})\d{11})$'
-
-    def __init__(self, message="Please, specify valid card number."):
-        self.message = message
-        self.validator = RegexValidator(
-            regex=CardNumValidator.CREDIT_CARD_RE, message=self.message)
-
-    def __call__(self, card_num):
-        return self.validator(card_num)
-
 
 class User(AbstractUser):
     phone_regex = RegexValidator(
@@ -33,7 +20,7 @@ class Account(models.Model):
 
     name = models.CharField(max_length=20)
     card_num = models.CharField(
-        max_length=16, default='000000000000', validators=[CardNumValidator], unique=True)
+        max_length=16, default='000000000000', validators=[ValidateCreditCard], unique=True)
     total = models.DecimalField(decimal_places=2, max_digits=1000, default=0)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='accounts')
