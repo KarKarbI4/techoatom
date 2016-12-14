@@ -1,0 +1,15 @@
+{% extends "finance/account.html" %}
+
+{% load bootstrap3 %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %} Edit account {% endblock %}
+
+{% block content %}
+        <form action="{% url 'charges:edit_account' account_id=account_id %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form account_form %}
+            {% bootstrap_button "Save changes" button_type="submit" button_class="btn-primary" %}
+        </form>
+{% endblock %}

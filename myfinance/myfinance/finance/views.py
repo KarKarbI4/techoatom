@@ -129,9 +129,37 @@ def view_amount(request, account_id):
     return render(request, 'finance/view_account_total.html', context=context)
 
 @login_required
+@check_owner
+def remove_account(request, account_id):
+    acc = Account.objects.get(id=account_id)
+    acc.delete()
+    return redirect(reverse('charges:accounts'))
+
+@login_required
+@check_owner
+def edit_account(request, account_id):
+    acc = Account.objects.get(id=account_id)
+    account_form = AccountForm(request.POST or None, request.FILES or None, instance=acc)
+    if request.method == 'POST':
+        if account_form.is_valid():
+            account_form.save()
+            success = True
+            return redirect(reverse('charges:accounts') + '?success=True')
+    elif request.method == 'GET':
+        success = None
+
+    context = {
+        'success': success,
+        'account_form': account_form,
+        'title': 'Edit Account',
+        'account_id': account_id,
+
+    }
+    return render(request, 'finance/edit.html', context)
+
+@login_required
 def accounts(request):
     accs = Account.objects.filter(owner=request.user)
-    
     success = request.GET.get('success', None)
 
     paginator = Paginator(accs, 10,  orphans=10)
