@@ -61,7 +61,7 @@ def login_view(request):
                     print("Next url: {}".format(request.POST.get('next')))
                     return redirect(request.POST['next'])
                 return redirect(reverse('charges:accounts'))
-            error(request, 'Wrong credentials!')
+            error(request, 'Wrong username or password!')
 
     context = {
         'login_form': login_form,
@@ -85,7 +85,7 @@ def register_view(request):
             user = authenticate(username=register_form.cleaned_data[
                                 'username'], password=register_form.cleaned_data['password'])
             if not user:
-                error(request, 'Wrong credentials!')
+                error(request, 'Wrong username or password!')
                 return redirect(reverse('charges:login'))
             login(request, user)
             return redirect(reverse('charges:accounts'))
