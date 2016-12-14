@@ -6,8 +6,15 @@
 
 {% block title %} Edit account {% endblock %}
 
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% url 'charges:edit_account' account_id=account.id as url_edit_account %}
+  {% breadcrumb "Edit Account" url_edit_account %}
+{% endblock %}
+
+
 {% block content %}
-        <form action="{% url 'charges:edit_account' account_id=account_id %}" method="post">
+        <form action="{% url 'charges:edit_account' account_id=account.id %}" method="post">
             {% csrf_token %}
             {% bootstrap_form account_form %}
             {% bootstrap_button "Save changes" button_type="submit" button_class="btn-primary" %}

@@ -157,8 +157,7 @@ def edit_account(request, account_id):
         'success': success,
         'account_form': account_form,
         'title': 'Edit Account',
-        'account_id': account_id,
-
+        'account': acc,
     }
     return render(request, 'finance/edit.html', context)
 
