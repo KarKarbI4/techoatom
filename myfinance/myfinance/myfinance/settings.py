@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'django_bootstrap_breadcrumbs',
     'datetime_picker',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -142,4 +143,17 @@ BOOTSTRAP3 = {
     'base_url': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/',
 }
 
-# BOOTSTRAP_BASE_URL = '/static/bootstrap/'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+    'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+    'rest_framework.parsers.JSONParser',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+    'rest_framework.renderers.JSONRenderer',
+],
+}
