@@ -131,6 +131,42 @@ def view_amount(request, account_id):
 
 @login_required
 @check_owner
+def remove_charge(request, account_id, charge_id):
+    charge = Charge.objects.get(id=charge_id)
+    acc = Account.objects.get(id=account_id)
+    charge.delete()
+    return redirect(reverse('charges:account', kwargs={'account_id': acc.id}))
+
+@login_required
+@check_owner
+def edit_charge(request, account_id, charge_id):
+    charge = Charge.objects.get(id=charge_id)
+    acc = Account.objects.get(id=account_id)
+    charge_form = ChargeForm(
+        request.POST or None, request.FILES or None, instance=charge)
+    success = None
+    if request.method == 'POST':
+        if charge_form.is_valid():
+            charge_form.save()
+            success = True
+            return redirect(reverse('charges:account', kwargs={'account_id': acc.id}) + '?success=True')
+        else:
+            success = False
+    context = {
+        'success': success,
+        'charge_form': charge_form,
+        'charge': charge,
+        'account': acc,
+    }
+    return render(request, 'finance/edit_charge.html', context)
+
+
+
+
+
+
+@login_required
+@check_owner
 def remove_account(request, account_id):
     acc = Account.objects.get(id=account_id)
     acc.delete()
