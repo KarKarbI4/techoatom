@@ -1,15 +1,15 @@
-{% extends "finance/account.html" %}
+{% extends "finance/account.html" %}1
 
 {% load bootstrap3 %}
-
+{% load datetime_picker %}
 {% load django_bootstrap_breadcrumbs %}
 
 {% block title %}New Charge - {{ account.name }} Account{% endblock %}
 
 {% block breadcrumbs %}
-    {{ block.super }}
-    {% url 'charges:create_charge' account_id=account.id as url_create_charge %}
-    {% breadcrumb "New Charge" url_create_charge %}
+  {{ block.super }}
+  {% url 'charges:create_charge' account_id=account.id as url_create_charge %}
+  {% breadcrumb "New Charge" url_create_charge %}
 {% endblock %}
 
 {% block content %}
@@ -21,8 +21,11 @@
 <form action="{% url 'charges:create_charge' account_id=account.id %}" method="post">
   {% csrf_token %}
   {% bootstrap_field charge_form.value addon_before='<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>' %}
-  {% bootstrap_field charge_form.date addon_before='<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>' %}
+  {% now "Y-m-d" as today %}
+  {% datetime_picker charge_form.date addon_before='<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>' maxDate=today format="YYYY-MM-DD" allowInputToggle=True %}
   {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" %}
 </form>
+
+
 
 {% endblock %}

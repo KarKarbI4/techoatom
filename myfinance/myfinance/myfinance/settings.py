@@ -31,8 +31,8 @@ ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'finance',
     'bootstrap3',
     'django_bootstrap_breadcrumbs',
+    'datetime_picker',
 ]
 
 MIDDLEWARE = [
@@ -79,8 +80,8 @@ WSGI_APPLICATION = 'myfinance.wsgi.application'
 
 DATABASES = {
     # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -135,23 +136,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
-# BOOTSTRAP_BASE_URL = os.path.join(STATIC_URL, 'bootstrap', '337')
-
-# Default settings
-# BOOTSTRAP3 = {
-#     'include_jquery': False,
-#     'jquery_url': os.path.join(BOOTSTRAP_BASE_URL, 'jquery-3.1.1.min.js'),
-#     'base_url': BOOTSTRAP_BASE_URL,
-#     'css_url': os.path.join(BOOTSTRAP_BASE_URL, 'css', 'bootstrap.min.css'),
-#     'javascript_url': os.path.join(BOOTSTRAP_BASE_URL, 'js', 'bootstrap.min.js'),
-# }
-
-# BOOTSTRAP3 = {
-#     'include_jquery': False,
-#     'jquery_url': '/static/jqu1ery-3.1.1.min.js',
-#     'base_url': '/static/bootstrap/',
-#     'css_url': '/static/bootstrap/css/bootstrap.min.css',
-#     'javascript_url': '/static/bootstrap/js/bootstrap.min.js',
-# }
+BOOTSTRAP3 = {
+    'include_jquery': False,
+    'jquery_url': 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
+    'base_url': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/',
+}
 
 # BOOTSTRAP_BASE_URL = '/static/bootstrap/'

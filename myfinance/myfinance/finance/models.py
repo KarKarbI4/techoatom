@@ -4,7 +4,6 @@ from django.core.validators import RegexValidator
 from django.db import models, transaction
 from django.db.models import Func
 
-
 # Create your models here.
 
 class User(AbstractUser):
