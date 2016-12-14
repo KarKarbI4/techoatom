@@ -167,19 +167,19 @@ def account(request, account_id):
     end_date = datetime.today()
     m = end_date.month
     start_date = end_date - relativedelta(months=12, days=end_date.day - 1)
-    
+
     latest_year_charges = Charge.objects.filter(
         account=account_id, date__range=[start_date, end_date])
     agg_data = latest_year_charges.annotate(month=Month('date')).values(
         'month').annotate(total=Sum('value')).order_by('month')
-    
+
     getcontext().prec = 3
-    
+
     hist_values = [[month_abbr[(i + m - 1) % 12 + 1], 0.0]
                    for i in range(1, 13)]
-    
+
     for rec in agg_data:
-        hist_values[(rec['month'] + m -1) % 12][1] = float(rec['total'])
+        hist_values[(rec['month'] + m - 1) % 12][1] = float(rec['total'])
     hist_header = [['Month', 'Total']]
     hist_data = hist_header + hist_values
     hist_json = json.dumps(hist_data)
@@ -206,10 +206,11 @@ def create_charge(request, account_id):
             charge.account = account
             charge.save()
             success = True
-
+            return redirect(reverse('charges:account', kwargs={'account_id': account_id, 'success': success}))
+        else:
+            success = False
     elif request.method == 'GET':
         charge_form = ChargeForm()
-        success = False
 
     context = {
         'account': account,
