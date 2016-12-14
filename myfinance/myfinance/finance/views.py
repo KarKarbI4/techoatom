@@ -15,6 +15,10 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods, require_POST
 
+from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
 from finance.forms import (AccountForm, ChargeForm, LoginForm, ProfileForm,
                            RegisterForm)
 from finance.models import Account, Charge, Month
@@ -155,9 +159,20 @@ def create_account(request):
 
 @login_required
 def accounts(request):
+    accs = Account.objects.filter(owner=request.user)
+    paginator = Paginator(accs, 10,  orphans=10)
+    page = request.GET.get('page')
+    try:
+        accounts = paginator.page(page)
+    except PageNotAnInteger:
+        accounts = paginator.page(1)
+    except EmptyPage:
+        accounts = paginator.page(paginator.num_pages)
+    
     context = {
-        'accounts': Account.objects.filter(owner=request.user)
+        'accounts': accounts
     }
+
     return render(request, 'finance/accounts.html', context)
 
 
@@ -184,9 +199,19 @@ def account(request, account_id):
     hist_data = hist_header + hist_values
     hist_json = json.dumps(hist_data)
     print(list(hist_data))
+    charges = Charge.objects.filter(account=account_id)
+    paginator = Paginator(charges, 10,  orphans=10)
+    page = request.GET.get('page')
+    try:
+        charges = paginator.page(page)
+    except PageNotAnInteger:
+        charges = paginator.page(1)
+    except EmptyPage:
+        charges = paginator.page(paginator.num_pages)
+
     context = {
         'account': Account.objects.get(id=account_id),
-        'charges': Charge.objects.filter(account=account_id),
+        'charges': charges,
         'hist_data': hist_json,
     }
 

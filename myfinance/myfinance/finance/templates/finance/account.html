@@ -26,8 +26,8 @@
   {% bootstrap_button "Add charge" href=url_create_charge button_class="btn-primary" icon="glyphicon glyphicon-plus" %}
   {% if charges %}
     {% include "finance/hist.html" with data=hist_data %}
+     <h3>Charges:</h3>
+  {% include "finance/charges_table.html" with charges=charges %}
   {% endif %}
 
-  <h3>Charges:</h3>
-  {% include "finance/charges_table.html" with charges=charges %}
 {% endblock %}
