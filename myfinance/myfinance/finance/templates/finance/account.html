@@ -15,6 +15,12 @@
 {% endblock %}
 
 {% block content %}
+  
+  {% if success %}
+    {% bootstrap_alert "Charge created successfully" alert_type='success' %}
+  {% elif success is not None %}
+    {% bootstrap_alert "Error occured while processing Charge creation" alert_type='danger' %}
+  {% endif %}
 
   <p>{{ url_account }}
   <h1>{{ account.name }}</h1>
@@ -26,8 +32,8 @@
   {% bootstrap_button "Add charge" href=url_create_charge button_class="btn-primary" icon="glyphicon glyphicon-plus" %}
   {% if charges %}
     {% include "finance/hist.html" with data=hist_data %}
-     <h3>Charges:</h3>
-  {% include "finance/charges_table.html" with charges=charges %}
   {% endif %}
+  <h3>Charges:</h3>
+  {% include "finance/charges_table.html" with charges=charges %}
 
 {% endblock %}

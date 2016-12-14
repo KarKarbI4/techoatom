@@ -1,23 +1,20 @@
-from datetime import datetime
-from calendar import month_abbr
-from decimal import Decimal, getcontext
 import json
+from calendar import month_abbr
+from datetime import datetime
+from decimal import Decimal, getcontext
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods, require_POST
-
-from django.core.paginator import Paginator
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.views.decorators.http import require_http_methods, require_POST, require_GET
 
 from finance.forms import (AccountForm, ChargeForm, LoginForm, ProfileForm,
                            RegisterForm)
@@ -131,6 +128,27 @@ def view_amount(request, account_id):
     }
     return render(request, 'finance/view_account_total.html', context=context)
 
+@login_required
+def accounts(request):
+    accs = Account.objects.filter(owner=request.user)
+    
+    success = request.GET.get('success', None)
+
+    paginator = Paginator(accs, 10,  orphans=10)
+    page = request.GET.get('page')
+    try:
+        accounts = paginator.page(page)
+    except PageNotAnInteger:
+        accounts = paginator.page(1)
+    except EmptyPage:
+        accounts = paginator.page(paginator.num_pages)
+
+    context = {
+        'accounts': accounts,
+        'success': success,
+    }
+
+    return render(request, 'finance/accounts.html', context)
 
 @login_required
 @csrf_exempt
@@ -145,6 +163,7 @@ def create_account(request):
             account.owner = request.user
             account.save()
             success = True
+            return redirect(reverse('charges:accounts') + '?success=True')
     elif request.method == 'GET':
         account_form = AccountForm()
         success = False
@@ -156,51 +175,38 @@ def create_account(request):
 
     return render(request, 'finance/create_account.html', context)
 
-
-@login_required
-def accounts(request):
-    accs = Account.objects.filter(owner=request.user)
-    paginator = Paginator(accs, 10,  orphans=10)
-    page = request.GET.get('page')
-    try:
-        accounts = paginator.page(page)
-    except PageNotAnInteger:
-        accounts = paginator.page(1)
-    except EmptyPage:
-        accounts = paginator.page(paginator.num_pages)
-    
-    context = {
-        'accounts': accounts
-    }
-
-    return render(request, 'finance/accounts.html', context)
-
-
-@check_owner
-@login_required
-def account(request, account_id):
+def get_hist_data(charges):
     end_date = datetime.today()
     m = end_date.month
     start_date = end_date - relativedelta(months=12, days=end_date.day - 1)
-    
-    latest_year_charges = Charge.objects.filter(
-        account=account_id, date__range=[start_date, end_date])
+
+    latest_year_charges = charges.filter(date__range=[start_date, end_date])
     agg_data = latest_year_charges.annotate(month=Month('date')).values(
         'month').annotate(total=Sum('value')).order_by('month')
-    
+
     getcontext().prec = 3
-    
+
     hist_values = [[month_abbr[(i + m - 1) % 12 + 1], 0.0]
                    for i in range(1, 13)]
-    
+
     for rec in agg_data:
-        hist_values[(rec['month'] + m -1) % 12][1] = float(rec['total'])
+        hist_values[(rec['month'] + m - 1) % 12][1] = float(rec['total'])
     hist_header = [['Month', 'Total']]
     hist_data = hist_header + hist_values
     hist_json = json.dumps(hist_data)
-    print(list(hist_data))
+    return hist_json
+
+@require_GET
+@check_owner
+@login_required
+def account(request, account_id):
+    success = request.GET.get('success', None)
+
     charges = Charge.objects.filter(account=account_id)
-    paginator = Paginator(charges, 10,  orphans=10)
+
+    hist_json = get_hist_data(charges)
+
+    paginator = Paginator(charges, 10, orphans=10)
     page = request.GET.get('page')
     try:
         charges = paginator.page(page)
@@ -213,6 +219,7 @@ def account(request, account_id):
         'account': Account.objects.get(id=account_id),
         'charges': charges,
         'hist_data': hist_json,
+        'success': success
     }
 
     return render(request, 'finance/account.html', context)
@@ -231,10 +238,11 @@ def create_charge(request, account_id):
             charge.account = account
             charge.save()
             success = True
-
+            return redirect(reverse('charges:account', kwargs={'account_id': account_id}) + '?success=True')
+        else:
+            success = False
     elif request.method == 'GET':
         charge_form = ChargeForm()
-        success = False
 
     context = {
         'account': account,
