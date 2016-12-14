@@ -7,8 +7,11 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
 from finance.models import Account, Charge, User
+from finance.validators import StripToNumbers, ValidateLuhnChecksum, ValidateCharacters
+
 
 class ChargeForm(ModelForm):
+
     class Meta:
         model = Charge
         fields = ['value', 'date']
@@ -23,14 +26,18 @@ class ChargeForm(ModelForm):
 
 class AccountForm(ModelForm):
 
+    def clean_card_num(self):
+        card_num = self.cleaned_data['card_num']
+        if not ValidateCharacters(card_num):
+            raise forms.ValidationError('Can only contain numbers and spaces.')
+        card_num = StripToNumbers(card_num)
+        if not ValidateLuhnChecksum(card_num):
+            raise forms.ValidationError('Not a valid credit card number.')
+        return card_num
+
     class Meta:
         model = Account
         fields = ['name', 'card_num', 'total']
-
-    def clean_card_number(self):
-        data = self.cleaned_data['card_num']
-        card_num = data.replace(' ', '').replace('-', '')
-        return card_num
 
 
 class LoginForm(ModelForm):
