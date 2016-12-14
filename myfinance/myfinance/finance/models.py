@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from django.db import models, transaction
 from django.db.models import Func
 
+from finance.validators import ValidateCreditCard
 # Create your models here.
 
 class User(AbstractUser):
@@ -18,7 +19,8 @@ class User(AbstractUser):
 class Account(models.Model):
 
     name = models.CharField(max_length=20)
-    card_num = models.CharField(max_length=16, default='000000000000', unique=True)
+    card_num = models.CharField(
+        max_length=16, default='000000000000', validators=[ValidateCreditCard], unique=True)
     total = models.DecimalField(decimal_places=2, max_digits=1000, default=0)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='accounts')
@@ -47,7 +49,7 @@ class Charge(models.Model):
 
     class Meta:
         db_table = 'charges'
-    
+
     def __str__(self):
         return str(self.value)
 
