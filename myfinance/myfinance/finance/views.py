@@ -128,6 +128,7 @@ def view_amount(request, account_id):
     }
     return render(request, 'finance/view_account_total.html', context=context)
 
+
 @login_required
 @check_owner
 def remove_account(request, account_id):
@@ -135,18 +136,22 @@ def remove_account(request, account_id):
     acc.delete()
     return redirect(reverse('charges:accounts'))
 
+
 @login_required
 @check_owner
 def edit_account(request, account_id):
     acc = Account.objects.get(id=account_id)
-    account_form = AccountForm(request.POST or None, request.FILES or None, instance=acc)
+    account_form = AccountForm(
+        request.POST or None, request.FILES or None, instance=acc)
+    success = None
+
     if request.method == 'POST':
         if account_form.is_valid():
             account_form.save()
             success = True
             return redirect(reverse('charges:accounts') + '?success=True')
-    elif request.method == 'GET':
-        success = None
+        else:
+            success = False
 
     context = {
         'success': success,
@@ -156,6 +161,7 @@ def edit_account(request, account_id):
 
     }
     return render(request, 'finance/edit.html', context)
+
 
 @login_required
 def accounts(request):
@@ -177,6 +183,7 @@ def accounts(request):
     }
 
     return render(request, 'finance/accounts.html', context)
+
 
 @login_required
 @csrf_exempt
@@ -203,6 +210,7 @@ def create_account(request):
 
     return render(request, 'finance/create_account.html', context)
 
+
 def get_hist_data(charges):
     end_date = datetime.today()
     m = end_date.month
@@ -223,6 +231,7 @@ def get_hist_data(charges):
     hist_data = hist_header + hist_values
     hist_json = json.dumps(hist_data)
     return hist_json
+
 
 @require_GET
 @check_owner
