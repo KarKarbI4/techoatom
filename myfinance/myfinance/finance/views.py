@@ -159,7 +159,7 @@ def edit_account(request, account_id):
         'title': 'Edit Account',
         'account': acc,
     }
-    return render(request, 'finance/edit.html', context)
+    return render(request, 'finance/edit_account.html', context)
 
 
 @login_required
