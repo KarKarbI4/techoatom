@@ -21,6 +21,9 @@
       {% endfor %}
     </tbody>
   </table>
+
+  {% bootstrap_pagination accounts url="?page=1" %}
+
 {% else %}
   {% url 'charges:create_account' as url_create_account%}
   <div class="alert alert-warning">
