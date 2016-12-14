@@ -95,3 +95,6 @@ env/
 
 # VS Code project settings
 .vscode/
+
+# django static files
+myfinance/myfinance/static/

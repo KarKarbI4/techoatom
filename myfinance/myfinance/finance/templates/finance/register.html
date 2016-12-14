@@ -1,0 +1,39 @@
+{% extends "finance/base.html" %}
+
+{% load bootstrap3 %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %}Register page{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+{% block menu %}
+{% endblock %}
+
+{% block content %}
+    <div class="login-form">
+        <div class="panel-heading">
+            <div class="panel-title text-center">
+                <h1 class="title">AMS My Finance</h1>
+                <hr />
+            </div>
+        </div> 
+        <div class="main-login main-center">
+            <h3>Sign up <br><small><span class="login-subheader"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> or continue back to <a href="{% url 'charges:homepage' %}">homepage</a></span></small></h3>
+            
+            <span class="subhea"></span>
+            <form action="{% url 'charges:register' %}" method="post">
+                {% bootstrap_field register_form.username addon_before='<span class="glyphicon glyphicon-user" aria-hidden="true"></span>' %}
+                {% bootstrap_field register_form.email addon_before='<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>' %}
+                {% bootstrap_field register_form.password addon_before='<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>' %}
+                {% bootstrap_field register_form.password_confirm addon_before='<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>' %}
+
+            <div class="form-group ">
+                {% bootstrap_button "Sign up" button_type="submit" button_class="btn btn-primary btn-lg btn-block login-button" %}
+            </div>
+            </form>
+            <span> Already have an account? <a href="{% url 'charges:login' %}"> Log in </a></span>
+        </div>
+    </div>
+{% endblock %}
