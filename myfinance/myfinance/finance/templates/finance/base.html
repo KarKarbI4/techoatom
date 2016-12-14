@@ -33,6 +33,7 @@
 	<meta name="author" content="Victor Tyunyakov">
 
 	<link rel="stylesheet" href="{% static 'finance/style.css' %}" />
+	{% block custom_headers %}{% endblock %}
 	<title>{% block title %}Base{% endblock %} - Myfinance</title>
 </head>
 

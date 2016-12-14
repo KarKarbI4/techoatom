@@ -1,7 +1,7 @@
-from datetime import date, datetime
 import re
+from datetime import date, datetime
 
-
+from bootstrap3_datetime.widgets import DateTimePicker
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
@@ -10,6 +10,16 @@ from finance.models import Account, Charge, User
 
 
 class ChargeForm(ModelForm):
+    options = {
+        "format": "YYYY-MM-DD",
+        "pickTime": False,
+        "showTodayButton": True,
+        "userCurrent": True,
+        "maxDate": datetime.today().strftime("%Y-%m-%d"),
+        "widgetPositioning": "{horizontal: left}"
+    }
+    date = forms.DateField(
+        widget=DateTimePicker(options=options))
 
     class Meta:
         model = Charge

@@ -1,15 +1,19 @@
-{% extends "finance/account.html" %}
+{% extends "finance/account.html" %}1
 
 {% load bootstrap3 %}
 
 {% load django_bootstrap_breadcrumbs %}
-
+{% block custom_headers %}
+  {% comment %}<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.js">
+          </script>
+  {{ charge_form.media }}{% endcomment %}
+{%endblock%}
 {% block title %}New Charge - {{ account.name }} Account{% endblock %}
 
 {% block breadcrumbs %}
-    {{ block.super }}
-    {% url 'charges:create_charge' account_id=account.id as url_create_charge %}
-    {% breadcrumb "New Charge" url_create_charge %}
+  {{ block.super }}
+  {% url 'charges:create_charge' account_id=account.id as url_create_charge %}
+  {% breadcrumb "New Charge" url_create_charge %}
 {% endblock %}
 
 {% block content %}
@@ -21,7 +25,10 @@
 <form action="{% url 'charges:create_charge' account_id=account.id %}" method="post">
   {% csrf_token %}
   {% bootstrap_field charge_form.value addon_before='<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>' %}
-  {% bootstrap_field charge_form.date addon_before='<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>' %}
+  {% comment %}<div id="div_{{ charge_form.date.html_name }}" class="form-group{% if charge_form.date.errors %} has-error{% endif %}">{% endcomment %}
+    {% bootstrap_field charge_form.date %}
+  {% comment %}</div>{% endcomment %}
+  {% comment %}{% bootstrap_field charge_form.date addon_before='<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>' %}{% endcomment %}
   {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" %}
 </form>
 
