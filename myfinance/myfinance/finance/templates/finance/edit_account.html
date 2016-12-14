@@ -16,7 +16,9 @@
 {% block content %}
         <form action="{% url 'charges:edit_account' account_id=account.id %}" method="post">
             {% csrf_token %}
-            {% bootstrap_form account_form %}
+            {% bootstrap_field account_form.name addon_before='<span class="glyphicon glyphicon-user" aria-hidden="true"></span>' %}
+            {% bootstrap_field account_form.card_num addon_before='<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>' %}
+            {% bootstrap_field account_form.total addon_before='<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>' %}
             {% bootstrap_button "Save changes" button_type="submit" button_class="btn-primary" %}
         </form>
 {% endblock %}
