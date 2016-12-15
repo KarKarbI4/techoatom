@@ -67,8 +67,8 @@ class Account(models.Model):
 
 class Charge(models.Model):
 
-    value = models.DecimalField(decimal_places=2, max_digits=300)
-    date = models.DateField()
+    value = models.DecimalField(decimal_places=2, max_digits=300, default="1")
+    date = models.DateField(default=datetime.today())
     account = models.ForeignKey(Account, related_name='charges')
 
     class Meta:

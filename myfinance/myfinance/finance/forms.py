@@ -19,9 +19,12 @@ class ChargeForm(ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         date = cleaned_data.get('date')
+        value = cleaned_data.get('value')
+        if value == 0:
+            self.add_error('value', 'Charge value must be not a zero')
         if not date:
             self.add_error('date', 'Please, specify correct date in format yyyy-mm-dd.')
-        if cleaned_data.get('value') < 0 and date > date.today():
+        if value < 0 and date > date.today():
             self.add_error(
                 'date', 'Charges off are not supported for future days. Please, try again.')
         return cleaned_data
