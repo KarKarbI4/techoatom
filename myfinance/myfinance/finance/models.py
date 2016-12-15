@@ -1,5 +1,7 @@
 from calendar import month_abbr
 from datetime import datetime
+from django.utils.timezone import now
+
 from decimal import Decimal, getcontext
 
 from dateutil.relativedelta import relativedelta
@@ -67,8 +69,8 @@ class Account(models.Model):
 
 class Charge(models.Model):
 
-    value = models.DecimalField(decimal_places=2, max_digits=300, default="1")
-    date = models.DateField(default=datetime.today())
+    value = models.DecimalField(decimal_places=2, max_digits=300, default=1)
+    date = models.DateField(default=now())
     account = models.ForeignKey(Account, related_name='charges')
 
     class Meta:
