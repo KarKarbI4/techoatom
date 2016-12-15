@@ -71,10 +71,6 @@ class Charge(models.Model):
     date = models.DateField()
     account = models.ForeignKey(Account, related_name='charges')
 
-    def save(self, *args, **kwargs):
-        self.account.make_charge(self)
-        super().save(*args, **kwargs)
-
     class Meta:
         db_table = 'charges'
 

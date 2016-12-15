@@ -224,6 +224,8 @@ def view_amount(request, account_id):
 def remove_charge(request, account_id, charge_id):
     charge = Charge.objects.get(id=charge_id)
     acc = Account.objects.get(id=account_id)
+    acc.total -= charge.value
+    acc.save()
     charge.delete()
     return redirect(reverse('charges:account', kwargs={'account_id': acc.id}))
 
@@ -232,13 +234,17 @@ def remove_charge(request, account_id, charge_id):
 @isOwnerOrAdmin
 def edit_charge(request, account_id, charge_id):
     charge = Charge.objects.get(id=charge_id)
+    initial_val = charge.value
     acc = Account.objects.get(id=account_id)
     charge_form = ChargeForm(
         request.POST or None, request.FILES or None, instance=charge)
     success = None
     if request.method == 'POST':
         if charge_form.is_valid():
-            charge_form.save()
+            acc.total -= initial_val
+            charge = charge_form.save()
+            acc.total += charge.value
+            acc.save()
             success = True
             return redirect(reverse('charges:account', kwargs={'account_id': acc.id}) + '?success=True')
         else:
@@ -380,6 +386,8 @@ def create_charge(request, account_id):
         if charge_form.is_valid():
             charge = charge_form.save(commit=False)
             charge.account = account
+            account.total += charge.value
+            account.save()
             charge.save()
             success = True
             return redirect(reverse('charges:account', kwargs={'account_id': account_id}) + '?success=True')

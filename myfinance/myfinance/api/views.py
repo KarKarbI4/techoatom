@@ -31,7 +31,7 @@ class AccountViewSet(mixins.RetrieveModelMixin,
                      mixins.UpdateModelMixin,
                      mixins.DestroyModelMixin,
                      viewsets.GenericViewSet):
-
+    
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
 

@@ -18,7 +18,7 @@
     {% elif success is not None %}
         {% bootstrap_alert "Error processing profile information" alert_type='danger' %}
     {% endif %}
-    <h3>My Profile</h3>
+    <h3>{{ profile.username }}'s Profile</h3>
     <form action="{% url 'charges:profile' name=profile.username %}" method="post">
         {% bootstrap_field profile_form.first_name addon_before='<span class="glyphicon glyphicon-user" aria-hidden="true"></span>' %}
         {% bootstrap_field profile_form.last_name addon_before='<span class="glyphicon glyphicon-user" aria-hidden="true"></span>' %}
