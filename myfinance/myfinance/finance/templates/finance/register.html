@@ -35,7 +35,10 @@
                 {% bootstrap_button "Sign up" button_type="submit" button_class="btn btn-primary btn-lg btn-block login-button" %}
             </div>
             </form>
-            <span> Already have an account? <a href="{% url 'charges:login' %}"> Log in </a></span>
+            <p><span> Already have an account? <a href="{% url 'charges:login' %}"> Log in </a></span>
+            <a href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request.path }}">
+                   <button>Log in Vk</button>
+</a>
         </div>
     </div>
 {% endblock %}

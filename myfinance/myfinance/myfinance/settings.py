@@ -15,6 +15,13 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SOCIAL_AUTH_VK_OAUTH2_KEY='5778477'
+SOCIAL_AUTH_VK_OAUTH2_SECRET='DwK62rZeZF1MnWUDaa8K'
+SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.52'
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend'
+)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -43,6 +50,7 @@ INSTALLED_APPS = [
     'django_bootstrap_breadcrumbs',
     'datetime_picker',
     'rest_framework',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -81,8 +89,8 @@ WSGI_APPLICATION = 'myfinance.wsgi.application'
 
 DATABASES = {
     # 'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

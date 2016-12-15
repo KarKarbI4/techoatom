@@ -19,6 +19,7 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('finance.urls', namespace='charges')),
+    url(r'^', include('social_django.urls', namespace='social')),
     url(r'^api/', include('api.urls', namespace='api')),
 ]
 
