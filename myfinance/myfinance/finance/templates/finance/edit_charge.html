@@ -15,7 +15,7 @@
 
 {% block content %}
         <form action="{% url 'charges:edit_charge' account_id=account.id charge_id=charge.id %}" method="post">
-            {% csrf_token %}
+                {% csrf_token %}
                 {% bootstrap_field charge_form.value addon_before='<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>' %}
                 {% now "Y-m-d" as today %}
                 {% datetime_picker charge_form.date addon_before='<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>' format="YYYY-MM-DD" allowInputToggle=True %}

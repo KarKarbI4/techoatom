@@ -25,5 +25,6 @@
         {% bootstrap_field profile_form.phone_number addon_before='<span class="glyphicon glyphicon-phone" aria-hidden="true"></span>' %}
         {% bootstrap_field profile_form.address addon_before='<span class="glyphicon glyphicon-home" aria-hidden="true"></span>' %}
         {% bootstrap_button "Save changes" button_type="submit" button_class="btn-primary btn-lg btn-block" %}
+        {% csrf_token %}
     </form>
 {% endblock %}
