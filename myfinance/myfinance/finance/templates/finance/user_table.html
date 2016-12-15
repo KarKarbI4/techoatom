@@ -1,4 +1,4 @@
-{% extends "finance/accounts.html" %}
+{% extends "finance/base.html" %}
 
 {% load bootstrap3 %}
 
@@ -6,8 +6,8 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% url 'charges:account' account_id=account.id as url_account %}
-    {% breadcrumb account.name url_account %}
+    {% url 'charges:usertable' as url_users %}
+    {% breadcrumb "Users" url_users %}
 {% endblock %}
 
 {% block content %}
