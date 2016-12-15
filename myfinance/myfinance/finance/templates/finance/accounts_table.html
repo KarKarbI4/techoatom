@@ -18,7 +18,7 @@
           <td>{{ account.name }}</td>
           <td>{{ account.card_num }}</td>
           <td>{{ account.total }}</td>
-          <td><a href='{% url 'charges:edit_account' account_id=account.id %}?id={{account.id | urlencode }}&name={{account.name | urlencode }}&total={{account.total | urlencode }}&card_num={{account.card_num | urlencode }}'>{% bootstrap_icon "glyphicon glyphicon-pencil" %}</a></td>
+          <td><a href='{% url 'charges:edit_account' account_id=account.id %}'>{% bootstrap_icon "glyphicon glyphicon-pencil" %}</a></td>
           <td><a href='{% url 'charges:remove_account' account_id=account.id %}'>{% bootstrap_icon "glyphicon glyphicon-remove" %}</a></td>
           <td><a href='{% url 'charges:account' account_id=account.id %}'>{% bootstrap_icon "glyphicon glyphicon-th-list" %}</a></td>
         </tr>
