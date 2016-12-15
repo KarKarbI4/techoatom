@@ -31,13 +31,16 @@
 	<meta charset="utf-8">
 	<meta name="description" content="Myfinance - online finance management service">
 	<meta name="author" content="Victor Tyunyakov">
-
 	<link rel="stylesheet" href="{% static 'finance/style.css' %}" />
+	
+	{% comment %}<link rel="stylesheet" href="{% static 'finance/animation.css' %}" />{% endcomment %}
+
 	{% block custom_headers %}{% endblock %}
 	<title>{% block title %}Base{% endblock %} - Myfinance</title>
 </head>
 
 <body>
+
 	{% block menu %}
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
@@ -80,7 +83,6 @@
 						<li><a href='{{ create_account_url }}'>Create Account</a></li>
 					{% endif %}
 					
-					
 
 				</ul>
 				
@@ -109,6 +111,13 @@
 		{% render_breadcrumbs %}
 		{% block content %}
 		{% endblock %}
+				<div id="large-header" class="large-header">
+					<canvas id="demo-canvas"></canvas></div>
 	</div>
+
+    <script src="{% static 'finance/TweenLite.min.js' %}"></script>
+    <script src="{% static 'finance/EasePack.min.js' %}"></script>
+    <script src="{% static 'finance/rAF.js' %}"></script>
+    <script src="{% static 'finance/demo-1.js' %}"></script>
 </body>
 </html>

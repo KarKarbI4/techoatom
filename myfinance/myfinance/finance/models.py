@@ -30,6 +30,9 @@ class Account(models.Model):
 
     class Meta:
         db_table = 'accounts'
+    
+    def __str__(self):
+       return str(self.name)     
 
 
 class Charge(models.Model):
@@ -45,6 +48,8 @@ class Charge(models.Model):
     class Meta:
         db_table = 'charges'
 
+    def __str__(self):
+        return str(self.value)    
 
 class Month(Func):
     function = 'EXTRACT'
