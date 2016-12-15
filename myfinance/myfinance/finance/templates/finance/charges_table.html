@@ -5,6 +5,8 @@
         <th>#</th>
         <th>Date</th>
         <th>Value</th>
+        <th></th>
+        <th></th>
     </thead>
     <tbody>
       {% for charge in charges %}
@@ -12,11 +14,14 @@
           <td>{{ forloop.counter }}</td>
           <td>{{ charge.date }}</td>
           <td>{{ charge.value }}</td>
+          <td><a href='{% url 'charges:edit_charge' account_id=account.id charge_id=charge.id %}'>{% bootstrap_icon "glyphicon glyphicon-pencil" %}</a></td>
+          <td><a href='{% url 'charges:remove_charge' account_id=account.id charge_id=charge.id %}'>{% bootstrap_icon "glyphicon glyphicon-remove" %}</a></td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
-{% else %}
+  {% bootstrap_pagination charges url="?page=1" %}
+  {% else %}
   {% url 'charges:create_charge' account_id=account.id as url_create_charge %}
   <div class="alert alert-warning">
     <strong>No charges. </strong> You can <a href="{{ url_create_charge }}" class="alert-link">create a new one</a>.

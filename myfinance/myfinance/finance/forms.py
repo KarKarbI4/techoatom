@@ -1,25 +1,16 @@
 import re
 from datetime import date, datetime
 
-from bootstrap3_datetime.widgets import DateTimePicker
 from django import forms
+
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
 from finance.models import Account, Charge, User
+from finance.validators import StripToNumbers, ValidateLuhnChecksum, ValidateCharacters
 
 
 class ChargeForm(ModelForm):
-    options = {
-        "format": "YYYY-MM-DD",
-        "pickTime": False,
-        "showTodayButton": True,
-        "userCurrent": True,
-        "maxDate": datetime.today().strftime("%Y-%m-%d"),
-        "widgetPositioning": "{horizontal: left}"
-    }
-    date = forms.DateField(
-        widget=DateTimePicker(options=options))
 
     class Meta:
         model = Charge
@@ -34,20 +25,19 @@ class ChargeForm(ModelForm):
 
 
 class AccountForm(ModelForm):
-    CREDIT_CARD_RE = r'^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\\d{3})\d{11})$'
+
+    def clean_card_num(self):
+        card_num = self.cleaned_data['card_num']
+        if not ValidateCharacters(card_num):
+            raise forms.ValidationError('Can only contain numbers and spaces.')
+        card_num = StripToNumbers(card_num)
+        if not ValidateLuhnChecksum(card_num):
+            raise forms.ValidationError('Not a valid credit card number.')
+        return card_num
 
     class Meta:
         model = Account
         fields = ['name', 'card_num', 'total']
-
-    def clean_card_number(self):
-        data = self.cleaned_data['card_num']
-        card_num = data.replace(' ', '').replace('-', '')
-        if not re.match(self.CREDIT_CARD_RE, data):
-            self.add_error(
-                'card_num', "Card number you specified is not valid. Plase, specify valid card number.")
-
-        return card_num
 
 
 class LoginForm(ModelForm):
@@ -74,7 +64,7 @@ class RegisterForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'email']
+        fields = ['username', 'password', 'email', 'phone_number', 'address']
 
 
 class ProfileForm(ModelForm):

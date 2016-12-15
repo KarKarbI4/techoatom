@@ -1,0 +1,24 @@
+{% extends "finance/account.html" %}
+
+{% load bootstrap3 %}
+{% load datetime_picker %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %} Edit Charge {% endblock %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% url 'charges:edit_charge' account_id=account.id as url_edit_charge %}
+  {% breadcrumb "Edit Charge" url_edit_charge %}
+{% endblock %}
+
+
+{% block content %}
+        <form action="{% url 'charges:edit_charge' account_id=account.id charge_id=charge.id %}" method="post">
+            {% csrf_token %}
+                {% bootstrap_field charge_form.value addon_before='<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>' %}
+                {% now "Y-m-d" as today %}
+                {% datetime_picker charge_form.date addon_before='<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>' maxDate=today format="YYYY-MM-DD" allowInputToggle=True %}
+            {% bootstrap_button "Save changes" button_type="submit" button_class="btn-primary" %}
+        </form>
+{% endblock %}

@@ -1,3 +1,4 @@
+# Register your models here.
 from django.contrib import admin
 from .models import User, Account, Charge
 # Register your models here.
@@ -40,4 +41,3 @@ class ChargeAdmin(admin.ModelAdmin):
     list_display_links = ('value', 'date')
     list_max_show_all = 10
     list_per_page = 5
-

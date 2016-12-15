@@ -1,10 +1,10 @@
 {% extends "finance/base.html" %}
 
+{% load bootstrap3 %}
+
 {% load django_bootstrap_breadcrumbs %}
 
 {% block title %}My Accounts{% endblock %}
-
-
 
 {% block breadcrumbs %}
     {{ block.super }}
@@ -13,6 +13,12 @@
 {% endblock %}
 
 {% block content %}
+    {% if success %}
+        {% bootstrap_alert "Account created successfully" alert_type='success' %}
+    {% elif success is not None %}
+        {% bootstrap_alert "Error occured while processing Account creation" alert_type='danger' %}
+    {% endif %}
+
     <h3>My Accounts</h3>
     
     {% include "finance/accounts_table.html" with accounts=accounts %}

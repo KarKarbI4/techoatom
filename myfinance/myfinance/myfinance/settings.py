@@ -37,13 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-  # 'django.contrib.sites',
-    # 'staticfiles',
+    'django.contrib.sites',
     'finance',
     'bootstrap3',
     'django_bootstrap_breadcrumbs',
-    'bootstrap3_datetime',
-    'moment',
+    'datetime_picker',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -81,18 +80,18 @@ WSGI_APPLICATION = 'myfinance.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
     # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-#     'NAME': 'myfinance~',
-    #     'USER': 'myfinance',
-    #     'PASSWORD': 'myfinance',
-    #     'HOST': 'localhost',
-    #     'PORT': '',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'myfinance',
+        'USER': 'myfinance',
+        'PASSWORD': 'myfinance',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
 
 
@@ -138,23 +137,23 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
-# BOOTSTRAP_BASE_URL = os.path.join(STATIC_URL, 'bootstrap', '337')
+BOOTSTRAP3 = {
+    'include_jquery': False,
+    'jquery_url': 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
+    'base_url': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/',
+}
 
-# Default settings
-# BOOTSTRAP3 = {
-#     'include_jquery': False,
-#     'jquery_url': os.path.join(BOOTSTRAP_BASE_URL, 'jquery-3.1.1.min.js'),
-#     'base_url': BOOTSTRAP_BASE_URL,
-#     'css_url': os.path.join(BOOTSTRAP_BASE_URL, 'css', 'bootstrap.min.css'),
-#     'javascript_url': os.path.join(BOOTSTRAP_BASE_URL, 'js', 'bootstrap.min.js'),
-# }
-
-# BOOTSTRAP3 = {
-#     'include_jquery': False,
-#     'jquery_url': '/static/jqu1ery-3.1.1.min.js',
-#     'base_url': '/static/bootstrap/',
-#     'css_url': '/static/bootstrap/css/bootstrap.min.css',
-#     'javascript_url': '/static/bootstrap/js/bootstrap.min.js',
-# }
-
-# BOOTSTRAP_BASE_URL = '/static/bootstrap/'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+    'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+    'rest_framework.parsers.JSONParser',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+    'rest_framework.renderers.JSONRenderer',
+    ],
+}

@@ -1,3 +1,5 @@
+migrations/
+.vscode-upload.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -95,3 +97,6 @@ env/
 
 # VS Code project settings
 .vscode/
+
+# django static files
+myfinance/myfinance/static/
