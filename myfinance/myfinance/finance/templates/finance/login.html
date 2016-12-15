@@ -32,6 +32,7 @@
             </div>
             </form>
             <span> Don't have an account? <a href="{% url 'charges:register' %}"> Sign up </a></span>
+            <a href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'charges:accounts' %}"></a>
         </div>
     </div>
 {% endblock %}

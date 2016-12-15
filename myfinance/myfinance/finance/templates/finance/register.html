@@ -37,9 +37,6 @@
                 {% csrf_token %}
             </form>
             <p><span> Already have an account? <a href="{% url 'charges:login' %}"> Log in </a></span>
-            <a href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request.path }}">
-                   <button>Log in Vk</button>
-</a>
         </div>
     </div>
 {% endblock %}
