@@ -78,6 +78,7 @@
 					{% url 'charges:homepage' as homepage_url %}
 					{% url 'charges:accounts' as accounts_url %}
 					{% url 'charges:create_account' as create_account_url %}
+					{% url 'charges:usertable' as usertable_url %}
 
 					{% if request.path == homepage_url %} 
 						<li class="active"><a href='{{ homepage_url }}'>Homepage<span class="sr-only">(current)</span></a></li>
@@ -98,6 +99,14 @@
 					{% else %}
 						<li><a href='{{ create_account_url }}'>Create Account</a></li>
 					{% endif %}
+					{% if user.is_staff %}
+						{# Create Account #}
+						{% if request.path == usertable_url %} 
+							<li class="active"><a href='{{ usertable_url }}'>Users List<span class="sr-only">(current)</span></a></li>
+						{% else %}
+							<li><a href='{{ usertable_url }}'>Users List</a></li>
+						{% endif %}
+					{% endif %}
 					
 
 				</ul>
@@ -111,13 +120,16 @@
 
 						<li role="separator" class="divider"></li>
 						<li><a href="{% url 'charges:logout' %}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Log Out</a></li>
+						{% if user.is_staff %}
+							<li role="separator" class="divider"></li>
+							<li><a href="{% url 'charges:usertable' %}"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>Users List</a></li>
+						{% endif %}
 					</ul>
 					</li>
 				</ul>
 				{% else %}
 				<a href="{% url 'charges:login' %}" class="navbar-link navbar-right navbar-text"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Log in</a>
 				{% endif %}
-
 			</div>
 
 		</div>
