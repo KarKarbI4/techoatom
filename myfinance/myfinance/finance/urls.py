@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^login/$', login_view, name='login'),
     url(r'^register/$', register_view, name='register'),
     url(r'^logout/$', logout_view, name='logout'),
-    url(r'^profile/$', profile, name='profile'),
+    url(r'^profile/(?P<name>\w+)/$', profile, name='profile'),
+    # url(r'^profile/(?P<name>\d+)/$', profile, name='profile'),
 ]

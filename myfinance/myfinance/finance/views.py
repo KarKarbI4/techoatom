@@ -16,20 +16,31 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
 
+
 from finance.forms import (AccountForm, ChargeForm, LoginForm, ProfileForm,
                            RegisterForm)
-from finance.models import Account, Charge, Month
+from finance.models import Account, Charge, Month, User
 from finance.random_transactions import random_transactions
 
 
-def check_owner(f):
+def isOwnerOrAdmin(f):
 
     @login_required
     def wrapper(request, account_id, *args, **kwargs):
-        if Account.objects.get(id=account_id).owner != request.user:
+        if Account.objects.get(id=account_id).owner != request.user or (not request.user.is_staff):
             raise PermissionDenied
         return f(request, account_id, *args, **kwargs)
     return wrapper
+
+def OwnerOrAdmin2(f):
+    
+    @login_required
+    def wrapper(request, account_id, *args, **kwargs):
+        if Account.objects.get(id=account_id).owner != request.user or (not request.user.is_staff):
+            raise PermissionDenied
+        return f(request, account_id, *args, **kwargs)
+    return wrapper
+
 
 
 def homepage(request):
@@ -100,9 +111,10 @@ def register_view(request):
 @require_http_methods(['POST', 'GET'])
 @login_required
 @csrf_exempt
-def profile(request):
+def profile(request, name):
+    profile = User.objects.get(username=name)
     profile_form = ProfileForm(
-        request.POST or None, request.FILES or None, instance=request.user)
+        request.POST or None, request.FILES or None, instance=profile)
     success = None
 
     if request.method == "POST":
@@ -114,13 +126,15 @@ def profile(request):
 
     context = {
         'profile_form': profile_form,
-        'success': success
+        'success': success,
+        'profile': profile,
+        
     }
     return render(request, 'finance/profile.html', context=context)
 
 
 @login_required
-@check_owner
+@isOwnerOrAdmin
 def view_amount(request, account_id):
     total = Account.objects.get(id=account_id).total
     context = {
@@ -130,7 +144,7 @@ def view_amount(request, account_id):
 
 
 @login_required
-@check_owner
+@isOwnerOrAdmin
 def remove_charge(request, account_id, charge_id):
     charge = Charge.objects.get(id=charge_id)
     acc = Account.objects.get(id=account_id)
@@ -138,7 +152,7 @@ def remove_charge(request, account_id, charge_id):
     return redirect(reverse('charges:account', kwargs={'account_id': acc.id}))
 
 @login_required
-@check_owner
+@isOwnerOrAdmin
 def edit_charge(request, account_id, charge_id):
     charge = Charge.objects.get(id=charge_id)
     acc = Account.objects.get(id=account_id)
@@ -166,7 +180,7 @@ def edit_charge(request, account_id, charge_id):
 
 
 @login_required
-@check_owner
+@isOwnerOrAdmin
 def remove_account(request, account_id):
     acc = Account.objects.get(id=account_id)
     acc.delete()
@@ -174,7 +188,7 @@ def remove_account(request, account_id):
 
 
 @login_required
-@check_owner
+@isOwnerOrAdmin
 def edit_account(request, account_id):
     acc = Account.objects.get(id=account_id)
     account_form = AccountForm(
@@ -269,7 +283,7 @@ def get_hist_data(charges):
 
 
 @require_GET
-@check_owner
+@isOwnerOrAdmin
 @login_required
 def account(request, account_id):
     success = request.GET.get('success', None)
@@ -297,7 +311,7 @@ def account(request, account_id):
     return render(request, 'finance/account.html', context)
 
 
-@check_owner
+@isOwnerOrAdmin
 @login_required
 def create_charge(request, account_id):
     charge_form = None
