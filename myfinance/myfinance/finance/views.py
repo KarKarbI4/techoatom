@@ -86,6 +86,19 @@ def login_view(request):
     return render(request, 'finance/login.html', context=context)
 
 
+def user_list(request):
+    users = User.objects.all()
+    paginator = Paginator(users, 10,  orphans=10)
+    page = request.GET.get('page')
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+    context = {'users': users}
+    return render(request, 'finance/user_table.html', context)
+
 def send_email(user_email):
     message = 'Thanks you for selecting our service !!!'
     address = 'coolfinanceteam@yandex.ru'
