@@ -1,0 +1,34 @@
+{% extends "finance/accounts.html" %}
+
+{% load bootstrap3 %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% url 'charges:account' account_id=account.id as url_account %}
+    {% breadcrumb account.name url_account %}
+{% endblock %}
+
+{% block content %}
+  
+  <table class="table table-striped">
+    <thead>
+        <th>#</th>
+        <th>Name</th>
+        <th></th>
+        <th></th>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ user.username }}</td>
+          <td><a href='{% url 'charges:profile' name=user.username %}'>{% bootstrap_icon "glyphicon glyphicon-pencil" %}</a></td>
+          {% comment %}<td><a href='{% url 'charges:remove_profile' user=username %}'>{% bootstrap_icon "glyphicon glyphicon-remove" %}</a></td>{% endcomment %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% bootstrap_pagination users url="?page=1" %}
+{% endblock %}
