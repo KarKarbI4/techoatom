@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'datetime_picker',
     'rest_framework',
     'social_django',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [

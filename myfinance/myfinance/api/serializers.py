@@ -44,7 +44,7 @@ class AccountSerializer(serializers.ModelSerializer):
         max_length=16,
         validators=[
             UniqueNumberValidator(queryset=Account.objects.all()),
-            CardNumberValidator(),
+            CardNumberValidator,
         ])
 
     class Meta:

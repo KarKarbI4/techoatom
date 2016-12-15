@@ -18,6 +18,7 @@
 {% endif %}
 
 <form action="{% url 'charges:create_account' %}" method="post">
+  {% csrf_token %}
   {% bootstrap_field account_form.name addon_before='<span class="glyphicon glyphicon-user" aria-hidden="true"></span>' %}
   {% bootstrap_field account_form.card_num addon_before='<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>' %}
   {% bootstrap_field account_form.total addon_before='<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>' %}

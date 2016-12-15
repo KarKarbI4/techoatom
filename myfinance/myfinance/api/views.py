@@ -42,9 +42,14 @@ class AccountViewSet(mixins.RetrieveModelMixin,
         return Response(serializer.data)
 
     def create_account(self, request, user_pk=None):
-        data = request.data
-        data['owner'] = user_pk
-        serializer = AccountSerializer(data)
+        data = {
+            'card_num': request.data['card_num'],
+            'name': request.data['name'],
+            'total': request.data['total'],
+        }
+        user = get_object_or_404(User, username=user_pk) if user_pk else request.user
+        data['owner'] = user
+        serializer = AccountSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)

@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 from rest_framework.routers import SimpleRouter
-
+from rest_framework.authtoken import views
 from api.views import ChargeViewSet, AccountViewSet, UserViewDetail
 
 router = SimpleRouter()
@@ -14,5 +14,6 @@ urlpatterns = [
         ChargeViewSet.as_view({'get': 'charges'}), name='charge-list'),
     url(r'^users/(?P<user_pk>\w+)/accounts/$', AccountViewSet.as_view(
         {'get': 'accounts', 'post': 'create_account'}), name='account-list'),
-    url(r'^users/(?P<pk>\w+)/$', UserViewDetail.as_view(), name='user-detail')
+    url(r'^users/(?P<pk>\w+)/$', UserViewDetail.as_view(), name='user-detail'),
+    url(r'^api-token-auth/', views.obtain_auth_token),
 ]
