@@ -22,26 +22,42 @@ from email import encoders
 import os
 from email.mime.text import MIMEText
 
+
+def isOwner(f):
+    @login_required
+    def wrapper(request, *args, **kwargs):
+        account_id = kwargs.get('account_id')
+        name = kwargs.get('name')
+        if account_id:
+            if Account.objects.get(id=account_id).owner != request.user:
+                raise PermissionDenied
+        elif name:
+            if User.objects.get(username=name) != request.user:
+                raise PermissionDenied
+        else:
+            raise PermissionDenied
+        return f(request, *args, **kwargs)
+    return wrapper
+
+def isAdmin(f):
+    @login_required
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise PermissionDenied
+        return f(request, *args, **kwargs)
+    return wrapper
+
 def isOwnerOrAdmin(f):
-
+    owner = isOwner(f)
+    admin = isAdmin(f)
     @login_required
-    def wrapper(request, account_id, *args, **kwargs):
-        if Account.objects.get(id=account_id).owner != request.user or (not request.user.is_staff):
-            raise PermissionDenied
-        return f(request, account_id, *args, **kwargs)
+    def wrapper(request, *args, **kwargs):
+        try:
+            return owner(request, *args, **kwargs)
+        except PermissionDenied:
+            return admin(request, *args, **kwargs)
     return wrapper
-
-def OwnerOrAdmin2(f):
-
-    @login_required
-    def wrapper(request, account_id, *args, **kwargs):
-        if Account.objects.get(id=account_id).owner != request.user or (not request.user.is_staff):
-            raise PermissionDenied
-        return f(request, account_id, *args, **kwargs)
-    return wrapper
-
-
-
+        
 def homepage(request):
     return render(request, 'finance/index.html')
 
@@ -80,7 +96,7 @@ def login_view(request):
 
     return render(request, 'finance/login.html', context=context)
 
-
+@isAdmin
 def user_list(request):
     users = User.objects.all()
     paginator = Paginator(users, 10,  orphans=10)
@@ -94,6 +110,7 @@ def user_list(request):
     context = {'users': users}
     return render(request, 'finance/user_table.html', context)
 
+
 def send_email(user_email):
     message = 'Thanks you for selecting our service !!!'
     address = 'coolfinanceteam@yandex.ru'
@@ -106,6 +123,7 @@ def send_email(user_email):
     smtp.login(address, 'qwerty12345')
     smtp.sendmail(address, address_to, msg.as_string())
     smtp.quit()
+
 
 @csrf_exempt
 def register_view(request):
@@ -134,7 +152,7 @@ def register_view(request):
 
     return render(request, 'finance/register.html', context=context)
 
-
+@isOwnerOrAdmin
 @require_http_methods(['POST', 'GET'])
 @login_required
 @csrf_exempt
@@ -155,7 +173,7 @@ def profile(request, name):
         'profile_form': profile_form,
         'success': success,
         'profile': profile,
-        
+
     }
     return render(request, 'finance/profile.html', context=context)
 
@@ -177,6 +195,7 @@ def remove_charge(request, account_id, charge_id):
     acc = Account.objects.get(id=account_id)
     charge.delete()
     return redirect(reverse('charges:account', kwargs={'account_id': acc.id}))
+
 
 @login_required
 @isOwnerOrAdmin
@@ -200,10 +219,6 @@ def edit_charge(request, account_id, charge_id):
         'account': acc,
     }
     return render(request, 'finance/edit_charge.html', context)
-
-
-
-
 
 
 @login_required
@@ -286,11 +301,13 @@ def create_account(request):
 
     return render(request, 'finance/create_account.html', context)
 
+
 def get_hist(charges):
     hist_header = [['Month', 'Total']]
     hist_data = hist_header + Account.get_hist_data(charges)
     hist_json = json.dumps(hist_data)
     return hist_json
+
 
 @require_GET
 @isOwnerOrAdmin
