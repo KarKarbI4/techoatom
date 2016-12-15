@@ -19,7 +19,7 @@ class ChargeForm(ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         date = cleaned_data.get('date')
-        if not cleaned_data:
+        if not date:
             self.add_error('date', 'Please, specify correct date in format yyyy-mm-dd.')
         if cleaned_data.get('value') < 0 and cleaned_data > date.today():
             self.add_error(
