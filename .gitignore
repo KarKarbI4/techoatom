@@ -1,5 +1,6 @@
 migrations/
 .vscode-upload.json
+settings.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

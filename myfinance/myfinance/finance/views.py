@@ -317,7 +317,7 @@ def account(request, account_id):
 
     charges = Charge.objects.filter(account=account_id)
 
-    hist_json = hist_json(charges)
+    hist_json = get_hist(charges)
 
     paginator = Paginator(charges, 10, orphans=10)
     page = request.GET.get('page')
