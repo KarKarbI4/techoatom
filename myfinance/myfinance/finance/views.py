@@ -1,15 +1,10 @@
 import json
-from calendar import month_abbr
-from datetime import datetime
-from decimal import Decimal, getcontext
 
-from dateutil.relativedelta import relativedelta
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -291,28 +286,11 @@ def create_account(request):
 
     return render(request, 'finance/create_account.html', context)
 
-
-def get_hist_data(charges):
-    end_date = datetime.today()
-    m = end_date.month
-    start_date = end_date - relativedelta(months=12, days=end_date.day - 1)
-
-    latest_year_charges = charges.filter(date__range=[start_date, end_date])
-    agg_data = latest_year_charges.annotate(month=Month('date')).values(
-        'month').annotate(total=Sum('value')).order_by('month')
-
-    getcontext().prec = 3
-
-    hist_values = [[month_abbr[(i + m - 1) % 12 + 1], 0.0]
-                   for i in range(1, 13)]
-
-    for rec in agg_data:
-        hist_values[(rec['month'] + m - 1) % 12][1] = float(rec['total'])
+def get_hist(charges):
     hist_header = [['Month', 'Total']]
-    hist_data = hist_header + hist_values
+    hist_data = hist_header + Account.get_hist_data(charges)
     hist_json = json.dumps(hist_data)
     return hist_json
-
 
 @require_GET
 @isOwnerOrAdmin
@@ -322,7 +300,7 @@ def account(request, account_id):
 
     charges = Charge.objects.filter(account=account_id)
 
-    hist_json = get_hist_data(charges)
+    hist_json = hist_json(charges)
 
     paginator = Paginator(charges, 10, orphans=10)
     page = request.GET.get('page')
