@@ -2,7 +2,8 @@ from django.conf.urls import url
 
 from finance.views import (account, accounts, create_account,
                            create_charge, homepage, login_view, logout_view,
-                           profile, register_view, view_amount, edit_account, remove_account, edit_charge, remove_charge)
+                           profile, register_view, view_amount, edit_account,
+                           remove_account, edit_charge, remove_charge, user_list)
 
 urlpatterns = [
     url(r'^$', homepage, name='homepage'),
@@ -27,5 +28,7 @@ urlpatterns = [
     url(r'^register/$', register_view, name='register'),
     url(r'^logout/$', logout_view, name='logout'),
     url(r'^profile/(?P<name>\w+)/$', profile, name='profile'),
+    url(r'^usertable/$', user_list, name='user_list'),
+
     # url(r'^profile/(?P<name>\d+)/$', profile, name='profile'),
 ]
