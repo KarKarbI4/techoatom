@@ -3,13 +3,26 @@ from django.shortcuts import get_list_or_404, get_object_or_404, render
 
 from api.serializers import AccountSerializer, ChargeSerializer, UserSerializer
 from finance.models import Account, Charge, User
-from rest_framework import mixins, status, viewsets, generics
+from rest_framework import generics, mixins, permissions, status, viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
 
 # Create your views here.
+
+class AccountOwnerOrAdmin(permissions.BasePermission):
+    message = 'Account view is not allowed.'
+
+    def has_object_permission(self, request, view, obj):
+        return (obj.owner == request.user) or request.user.is_staff
+
+
+class ChargeOwnerOrAdmin(permissions.BasePermission):
+    message = 'Charge view is not allowed.'
+
+    def has_object_permission(self, request, view, obj):
+        return (obj.account.owner == request.user) or request.user.is_staff
 
 
 class ChargeViewSet(mixins.RetrieveModelMixin,
@@ -19,7 +32,7 @@ class ChargeViewSet(mixins.RetrieveModelMixin,
 
     queryset = Charge.objects.all()
     serializer_class = ChargeSerializer
-
+    permission_classes = [permissions.IsAuthenticated, ChargeOwnerOrAdmin]
     def charges(self, request, account_pk=None):
         account = get_object_or_404(Account, id=account_pk)
         charges = get_list_or_404(Charge, account=account)
@@ -31,9 +44,10 @@ class AccountViewSet(mixins.RetrieveModelMixin,
                      mixins.UpdateModelMixin,
                      mixins.DestroyModelMixin,
                      viewsets.GenericViewSet):
-    
+
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
+    permission_classes = [permissions.IsAuthenticated, AccountOwnerOrAdmin]
 
     def accounts(self, request, user_pk=None):
         user = get_object_or_404(User, username=user_pk)
@@ -47,8 +61,10 @@ class AccountViewSet(mixins.RetrieveModelMixin,
             'name': request.data['name'],
             'total': request.data['total'],
         }
-        user = get_object_or_404(User, username=user_pk) if user_pk else request.user
-        data['owner'] = {'username': user.username, 'email': user.email, 'phone_number':user.phone_number, 'address': user.address}
+        user = get_object_or_404(
+            User, username=user_pk) if user_pk else request.user
+        data['owner'] = {'username': user.username, 'email': user.email,
+                         'phone_number': user.phone_number, 'address': user.address}
         serializer = AccountSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -79,6 +95,7 @@ class UserViewDetail(mixins.RetrieveModelMixin,
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [permissions.IsAdminUser]
 
     def get(self, request, *args, **kwargs):
         kwargs['pk'] = self.get_pk(request, **kwargs)
