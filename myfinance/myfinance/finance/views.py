@@ -22,6 +22,10 @@ from finance.forms import (AccountForm, ChargeForm, LoginForm, ProfileForm,
 from finance.models import Account, Charge, Month, User
 from finance.random_transactions import random_transactions
 
+from smtplib import SMTP_SSL
+from email import encoders
+import os
+from email.mime.text import MIMEText
 
 def isOwnerOrAdmin(f):
 
@@ -33,7 +37,7 @@ def isOwnerOrAdmin(f):
     return wrapper
 
 def OwnerOrAdmin2(f):
-    
+
     @login_required
     def wrapper(request, account_id, *args, **kwargs):
         if Account.objects.get(id=account_id).owner != request.user or (not request.user.is_staff):
@@ -82,6 +86,19 @@ def login_view(request):
     return render(request, 'finance/login.html', context=context)
 
 
+def send_email(user_email):
+    message = 'Thanks you for selecting our service !!!'
+    address = 'coolfinanceteam@yandex.ru'
+    address_to = user_email
+    msg = MIMEText(message)
+    msg['From'] = address
+    msg['To'] = address_to
+    smtp = SMTP_SSL()
+    smtp.connect('smtp.yandex.ru')
+    smtp.login(address, 'qwerty12345')
+    smtp.sendmail(address, address_to, msg.as_string())
+    smtp.quit()
+
 @csrf_exempt
 def register_view(request):
     if request.method == "GET":
@@ -94,7 +111,9 @@ def register_view(request):
             user.set_password(user.password)
             user.save()
             user = authenticate(username=register_form.cleaned_data[
-                                'username'], password=register_form.cleaned_data['password'])
+                'username'], password=register_form.cleaned_data['password'])
+            print(dir(register_form))
+            send_email(request.POST['email'])
             if not user:
                 error(request, 'Wrong credentials!')
                 return redirect(reverse('charges:login'))
