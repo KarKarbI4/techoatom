@@ -1,5 +1,5 @@
 import json
-
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error
@@ -151,6 +151,37 @@ def register_view(request):
     }
 
     return render(request, 'finance/register.html', context=context)
+
+
+@staff_member_required
+@require_http_methods(['POST', 'GET'])
+@login_required
+def remove_profile(request, name):
+    user = User.objects.get(username=name)
+    user.delete()
+    return redirect(reverse('charges:usertable'))
+
+@staff_member_required
+@require_http_methods(['POST', 'GET'])
+@login_required
+def edit_profile(request, name):
+    user = User.objects.get(username=name)
+    profile_form = ProfileForm(request.POST or None, request.FILES or None, instance=user)
+    success = None
+
+    if request.method == 'POST':
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect(reverse('charges:usertable'))
+    context = {
+        'profile_form': profile_form,
+        'success': success,
+        'profile': user,
+    }
+    return render(request, 'finance/profile.html', context=context)
+
+
+
 
 @isOwnerOrAdmin
 @require_http_methods(['POST', 'GET'])

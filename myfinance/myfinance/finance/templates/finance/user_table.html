@@ -24,8 +24,9 @@
         <tr>
           <td>{{ forloop.counter }}</td>
           <td>{{ user.username }}</td>
-          <td><a href='{% url 'charges:profile' name=user.username %}'>{% bootstrap_icon "glyphicon glyphicon-pencil" %}</a></td>
-          {% comment %}<td><a href='{% url 'charges:remove_profile' user=username %}'>{% bootstrap_icon "glyphicon glyphicon-remove" %}</a></td>{% endcomment %}
+          <td><a href='{% url 'charges:edit_profile' name=user.username %}'>{% bootstrap_icon "glyphicon glyphicon-pencil" %}</a></td>
+          <td><a href='{% url 'charges:remove_profile' name=user.username %}'>{% bootstrap_icon "glyphicon glyphicon-remove" %}</a></td>
+          <td><a href='{% url 'charges:profile' name=user.username %}'>{% bootstrap_icon "glyphicon glyphicon-th-list" %}</a></td>
         </tr>
       {% endfor %}
     </tbody>
