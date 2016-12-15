@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_bootstrap_breadcrumbs',
     'datetime_picker',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
