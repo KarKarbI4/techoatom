@@ -48,7 +48,7 @@ class AccountViewSet(mixins.RetrieveModelMixin,
             'total': request.data['total'],
         }
         user = get_object_or_404(User, username=user_pk) if user_pk else request.user
-        data['owner'] = user
+        data['owner'] = {'username': user.username, 'email': user.email, 'phone_number':user.phone_number, 'address': user.address}
         serializer = AccountSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

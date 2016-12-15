@@ -1,7 +1,7 @@
 {% extends "finance/base.html" %}
 
 {% load bootstrap3 %}
-
+{% load static %}
 {% load django_bootstrap_breadcrumbs %}
 
 {% block title %}Login page{% endblock %}
@@ -32,7 +32,8 @@
             </div>
             </form>
             <span> Don't have an account? <a href="{% url 'charges:register' %}"> Sign up </a></span>
-            <a href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'charges:accounts' %}"></a>
+            <br>
+            <a href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'charges:accounts' %}"><img src="{% static 'finance/image/vk_logo.jpg' %}" alt="VK login" height="32" width="32"></a>
         </div>
     </div>
 {% endblock %}

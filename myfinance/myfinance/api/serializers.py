@@ -11,11 +11,11 @@ class UniqueNumberValidator(object):
         self.queryset = queryset
 
     def __call__(self, value):
-        if self.queryset.filter(number=value).exists():
+        if self.queryset.filter(card_num=value).exists():
             raise serializers.ValidationError('This field must be a unique.')
 
 
-class CardNumberValidator():
+class CardNumberValidator:
 
     def __call__(self, number):
         """ Check that a credit card number matches the type and validates the Luhn Checksum """
@@ -44,7 +44,6 @@ class AccountSerializer(serializers.ModelSerializer):
         max_length=16,
         validators=[
             UniqueNumberValidator(queryset=Account.objects.all()),
-            CardNumberValidator,
         ])
 
     class Meta:
